@@ -14,7 +14,7 @@ class Config:
     OPENAI_BASE_URL = os.getenv('OPENAI_BASE_URL', 'https://api.openai.com/v1')
     
     # 硅基流动配置
-    SILICON_FLOW_API_KEY = os.getenv('SILICON_FLOW_API_KEY', 'sk-kdbwcxieklfjsmvwbogngriafpwaaigrsxpekmumgaabzbzx')
+    SILICON_FLOW_API_KEY = os.getenv('SILICON_FLOW_API_KEY', 'sk-xxx')
     SILICON_FLOW_BASE_URL = os.getenv('SILICON_FLOW_BASE_URL', 'https://api.siliconflow.cn/v1')
     SILICON_FLOW_MODEL = os.getenv('SILICON_FLOW_MODEL', 'deepseek-ai/DeepSeek-R1-0528-Qwen3-8B')
     
