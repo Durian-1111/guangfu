@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智能对话 - 广府非遗文化平台</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/static/css/main.css" rel="stylesheet" />
+    <link href="/static/css/chat.css" rel="stylesheet" />
+    <style>
+      :root {
+        --primary-color: #c41e3a;
+        --primary-hover: #a01729;
+        --secondary-color: #d4af37;
+        --accent-color: #ff6b35;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --bg-primary: #ffffff;
+        --bg-secondary: #fef7f0;
+        --bg-tertiary: #f8f4f0;
+        --text-primary: #2d1810;
+        --text-secondary: #8b4513;
+        --text-muted: #a0522d;
+        --border-color: #e8d5c4;
+        --border-light: #f4e6d7;
+        --shadow-sm: 0 1px 2px 0 rgb(196 30 58 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(196 30 58 / 0.1),
+          0 2px 4px -2px rgb(196 30 58 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(196 30 58 / 0.1),
+          0 4px 6px -4px rgb(196 30 58 / 0.1);
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+        --spacing-2xl: 3rem;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Oxygen", "Ubuntu", "Cantarell", "PingFang SC", "Microsoft YaHei",
+          sans-serif;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow: hidden;
+      }
+
+      /* 调整主容器以适应导航栏 */
+      .chat-container {
+        display: flex;
+        height: calc(100vh - 70px);
+        background: var(--bg-primary);
+        margin-top: 70px;
+      }
+
+      /* 左侧边栏 */
+      .sidebar {
+        width: 280px;
+        background: var(--bg-primary);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .sidebar-header {
+        padding: 1.5rem 1rem;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+      }
+
+      .sidebar-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        margin-left: 20%;
+      }
+
+      .sidebar-subtitle {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-left: 20%;
+      }
+
+      .sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      /* 侧边栏导航 */
+      .sidebar-navigation {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        margin-bottom: 0.25rem;
+      }
+
+      .nav-item:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+
+      .nav-item i {
+        width: 20px;
+        margin-right: 0.75rem;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+      }
+
+      .nav-item:hover i {
+        color: var(--primary-color);
+      }
+
+      /* 专家列表 */
+      .agent-list {
+        margin-bottom: 2rem;
+      }
+
+      .agent-list-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+      }
+
+      .agent-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 0.25rem;
+      }
+
+      .agent-item:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .agent-item.active {
+        background: #c41e2708;
+        color: white;
+      }
+
+      /* 在线状态呼吸灯动画 */
+      .agent-info .online-status {
+        margin: 0;
+        margin-bottom: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 12px;
+      }
+
+      .online-dot {
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+        flex-shrink: 0;
+        margin-left: 0.4rem;
+        margin-top: 0.6rem;
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.1);
+        }
+      }
+
+      /* 预设问题按钮 */
+      .suggested-questions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding: 0.5rem 0;
+        justify-content: center; /* 居中显示 */
+      }
+
+      .suggested-question-btn {
+        padding: 0.5rem 1rem;
+        background: rgba(196, 30, 58, 0.08);
+        color: var(--primary-color);
+        border: 1px solid rgba(196, 30, 58, 0.2);
+        border-radius: 20px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .suggested-question-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+
+      .agent-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .agent-info h4 {
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.125rem;
+      }
+
+      .agent-info p {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin: 0;
+      }
+
+      /* 主聊天区域 */
+      .chat-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: var(--bg-primary);
+      }
+
+      /* 聊天头部 */
+      .chat-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--bg-primary);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .chat-agent-info {
+        display: flex;
+        align-items: center;
+      }
+
+      .chat-agent-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.125rem;
+      }
+
+      .chat-agent-details h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.125rem;
+      }
+
+      .chat-agent-details p {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+
+      .chat-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .chat-action-btn {
+        padding: 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        background: var(--bg-primary);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .chat-action-btn:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+
+      /* 消息区域 */
+      .messages-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem 1.5rem;
+        background: linear-gradient(
+          135deg,
+          var(--bg-secondary) 0%,
+          #faf8f5 100%
+        );
+        position: relative;
+      }
+
+      .messages-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 20% 20%,
+            rgba(196, 30, 58, 0.03) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(212, 175, 55, 0.03) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+
+      .message {
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+        animation: messageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes messageSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.user {
+        flex-direction: row-reverse;
+        margin-left: 15%;
+      }
+
+      .message.agent {
+        margin-right: 15%;
+      }
+
+      .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        font-weight: 600;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 2px solid white;
+        position: relative;
+      }
+
+      .message.user .message-avatar {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--primary-hover) 100%
+        );
+        color: white;
+        margin-left: 1rem;
+      }
+
+      .message.agent .message-avatar {
+        background: linear-gradient(
+          135deg,
+          var(--success-color) 0%,
+          #059669 100%
+        );
+        color: white;
+        margin-right: 1rem;
+      }
+
+      .message-avatar::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.8),
+          rgba(255, 255, 255, 0.2)
+        );
+        z-index: -1;
+      }
+
+      .message-content {
+        max-width: 75%;
+        background: var(--bg-primary);
+        padding: 1.25rem 1.5rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06),
+          0 4px 12px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(196, 30, 58, 0.08);
+        position: relative;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      }
+
+      .message-content:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08),
+          0 6px 16px rgba(0, 0, 0, 0.06);
+      }
+
+      .message.user .message-content {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--primary-hover) 100%
+        );
+        color: white;
+        border: none;
+        border-radius: 20px 20px 4px 20px;
+      }
+
+      .message.agent .message-content {
+        background: var(--bg-primary);
+        border-radius: 20px 20px 20px 4px;
+      }
+
+      .message.user .message-content::before {
+        content: "";
+        position: absolute;
+        right: -8px;
+        bottom: 8px;
+        width: 0;
+        height: 0;
+        border-left: 12px solid var(--primary-color);
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+
+      .message.agent .message-content::before {
+        content: "";
+        position: absolute;
+        left: -8px;
+        bottom: 8px;
+        width: 0;
+        height: 0;
+        border-right: 12px solid var(--bg-primary);
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+
+      .message-time {
+        font-size: 0.75rem;
+        color: rgba(0, 0, 0, 0.5);
+        margin-top: 0.75rem;
+        font-weight: 500;
+        opacity: 0.8;
+      }
+
+      .message.user .message-time {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      /* 消息内容样式 */
+      .message-content p {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .message-content p:not(:last-child) {
+        margin-bottom: 0.75rem;
+      }
+
+      .message-content code {
+        background: rgba(0, 0, 0, 0.08);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.9em;
+        font-family: "Consolas", "Monaco", monospace;
+      }
+
+      .message.user .message-content code {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .message-content pre {
+        background: rgba(0, 0, 0, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 0.75rem 0;
+      }
+
+      .message.user .message-content pre {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      /* 输入区域 */
+      .input-container {
+        padding: 1.5rem 2rem 2rem;
+        border-top: 1px solid var(--border-color);
+        background: linear-gradient(
+          135deg,
+          var(--bg-primary) 0%,
+          var(--bg-secondary) 100%
+        );
+        backdrop-filter: blur(10px);
+        display: none; /* 默认隐藏，选择专家后显示 */
+      }
+      
+      /* 当有专家选择时显示输入框 */
+      .input-container.show {
+        display: block;
+      }
+
+      .input-wrapper {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--bg-primary);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(196, 30, 58, 0.08),
+          0 4px 16px rgba(196, 30, 58, 0.04),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(196, 30, 58, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .input-wrapper:hover {
+        box-shadow: 0 12px 40px rgba(196, 30, 58, 0.12),
+          0 6px 20px rgba(196, 30, 58, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        transform: translateY(-1px);
+      }
+
+      .input-wrapper:focus-within {
+        box-shadow: 0 16px 48px rgba(196, 30, 58, 0.15),
+          0 8px 24px rgba(196, 30, 58, 0.08), 0 0 0 4px rgba(196, 30, 58, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 1);
+        transform: translateY(-2px);
+        border-color: var(--primary-color);
+      }
+
+      .input-field {
+        width: 100%;
+        padding: 1.25rem 4rem 1.25rem 1.5rem;
+        border: none;
+        border-radius: 24px;
+        font-size: 1rem;
+        line-height: 1.6;
+        background: transparent;
+        color: var(--text-primary);
+        resize: none;
+        min-height: 60px;
+        max-height: 200px;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+
+      .input-field::placeholder {
+        color: var(--text-muted);
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+      }
+
+      .input-field:focus::placeholder {
+        opacity: 0.5;
+      }
+
+      .input-field:focus {
+        outline: none;
+      }
+
+      .send-button {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--primary-hover) 100%
+        );
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3),
+          0 2px 6px rgba(196, 30, 58, 0.2);
+        font-size: 1.1rem;
+      }
+
+      .send-button:hover:not(:disabled) {
+        background: linear-gradient(
+          135deg,
+          var(--primary-hover) 0%,
+          #8b1538 100%
+        );
+        transform: translateY(-50%) scale(1.08);
+        box-shadow: 0 6px 16px rgba(196, 30, 58, 0.4),
+          0 3px 8px rgba(196, 30, 58, 0.25);
+      }
+
+      .send-button:active:not(:disabled) {
+        transform: translateY(-50%) scale(1.02);
+      }
+
+      .send-button:disabled {
+        background: linear-gradient(135deg, var(--text-muted) 0%, #9ca3af 100%);
+        cursor: not-allowed;
+        transform: translateY(-50%);
+        box-shadow: 0 2px 6px rgba(156, 163, 175, 0.2);
+        opacity: 0.6;
+      }
+
+      /* 欢迎界面 */
+      .welcome-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        padding: 3rem 2rem;
+        position: relative;
+        background: linear-gradient(
+          135deg,
+          rgba(196, 30, 58, 0.02) 0%,
+          rgba(34, 197, 94, 0.02) 50%,
+          rgba(59, 130, 246, 0.02) 100%
+        );
+        animation: welcomeFloat 6s ease-in-out infinite;
+      }
+
+      .welcome-screen::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(196, 30, 58, 0.05) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.1);
+          opacity: 0.8;
+        }
+      }
+
+      .welcome-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #c41e3a, #ffc107);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: 0 12px 32px rgba(196, 30, 58, 0.2),
+          0 6px 16px rgba(196, 30, 58, 0.1);
+        position: relative;
+        z-index: 1;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .welcome-icon::after {
+        content: "";
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.3),
+          rgba(255, 255, 255, 0.1)
+        );
+        z-index: -1;
+      }
+
+      .welcome-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #c41e3a, #ffc107);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+      }
+
+      .welcome-subtitle {
+        color: var(--text-secondary);
+        margin-bottom: 2.5rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        max-width: 400px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* 专家介绍 */
+      .experts-intro {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 1024px) {
+        .experts-intro {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .experts-intro {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .expert-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .expert-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-color);
+      }
+
+      .expert-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+      }
+
+      .expert-card h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+      }
+
+      .expert-card p {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .quick-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .quick-action {
+        padding: 0.75rem 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+      }
+
+      .quick-action:hover {
+        background: var(--bg-tertiary);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+
+      /* 加载动画 */
+      .typing-indicator {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        background: var(--bg-primary);
+        border-radius: 20px 20px 20px 4px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06),
+          0 4px 12px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(196, 30, 58, 0.08);
+        gap: 1rem;
+        animation: fadeInUp 0.4s ease-out;
+        position: relative;
+        backdrop-filter: blur(10px);
+        margin-bottom: 2rem;
+        margin-right: 15%;
+        min-width: 300px;
+        white-space: nowrap;
+      }
+
+      .typing-indicator::before {
+        content: "";
+        position: absolute;
+        left: -8px;
+        bottom: 8px;
+        width: 0;
+        height: 0;
+        border-right: 12px solid var(--bg-primary);
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+
+      .typing-text {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .typing-dots {
+        display: flex;
+        gap: 0.375rem;
+        align-items: center;
+      }
+
+      .typing-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        animation: typing 1.6s infinite ease-in-out;
+        opacity: 0.6;
+        box-shadow: 0 2px 4px rgba(196, 30, 58, 0.2);
+      }
+
+      .typing-dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.3s;
+      }
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+
+      @keyframes typing {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0) scale(1);
+          opacity: 0.6;
+        }
+        30% {
+          transform: translateY(-12px) scale(1.2);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 100%;
+          position: fixed;
+          top: 0;
+          left: -100%;
+          z-index: 1000;
+          transition: left 0.3s ease;
+        }
+
+        .sidebar.open {
+          left: 0;
+        }
+
+        .chat-main {
+          width: 100%;
+        }
+
+        .message-content {
+          max-width: 85%;
+        }
+
+        .input-container {
+          padding: 1rem;
+        }
+      }
+
+      /* 滚动条样式 */
+      .messages-container::-webkit-scrollbar,
+      .sidebar-content::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .messages-container::-webkit-scrollbar-track,
+      .sidebar-content::-webkit-scrollbar-track {
+        background: var(--bg-tertiary);
+      }
+
+      .messages-container::-webkit-scrollbar-thumb,
+      .sidebar-content::-webkit-scrollbar-thumb {
+        background: var(--text-muted);
+        border-radius: 3px;
+      }
+
+      .messages-container::-webkit-scrollbar-thumb:hover,
+      .sidebar-content::-webkit-scrollbar-thumb:hover {
+        background: var(--text-secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 现代化导航栏 -->
+    <nav class="modern-navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <i class="fas fa-dragon"></i>
+          <span>广府非遗</span>
+        </div>
+        <div class="nav-menu">
+          <a href="/" class="nav-link">首页</a>
+          <a href="/chat" class="nav-link active">行家交流</a>
+          <a href="/collaboration" class="nav-link">协作讨论</a>
+          <button class="btn-modern" onclick="location.href='/features'">
+            功能中心
+          </button>
+          <a href="/about" class="nav-link">关于</a>
+        </div>
+        <div class="nav-actions"></div>
+      </div>
+    </nav>
+
+    <div class="chat-container">
+      <!-- 左侧边栏 -->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">广府非遗文化平台</div>
+          <div class="sidebar-subtitle">智能专家对话系统</div>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- 导航链接 -->
+          <div class="sidebar-navigation">
+            <a href="/" class="nav-item">
+              <i class="fas fa-home"></i>
+              <span>返回首页</span>
+            </a>
+            <a href="/collaboration" class="nav-item">
+              <i class="fas fa-users"></i>
+              <span>协同讨论</span>
+            </a>
+          </div>
+
+          <!-- 专家列表 -->
+          <div class="agent-list">
+            <div class="agent-list-title">选择专家</div>
+
+            <div class="agent-item" data-agent="cantonese_opera_critic">
+              <div class="agent-avatar" style="background: #f59e0b">
+                <i class="fas fa-theater-masks"></i>
+              </div>
+              <div class="agent-info">
+                <h4>粤剧大师</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>精通粤剧艺术与历史</p>
+              </div>
+            </div>
+
+            <div class="agent-item" data-agent="architecture_expert">
+              <div class="agent-avatar" style="background: #10b981">
+                <i class="fas fa-building"></i>
+              </div>
+              <div class="agent-info">
+                <h4>建筑师傅</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>了解广府传统建筑</p>
+              </div>
+            </div>
+
+            <div class="agent-item" data-agent="culinary_expert">
+              <div class="agent-avatar" style="background: #ef4444">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <div class="agent-info">
+                <h4>美食师傅</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>熟悉岭南饮食文化</p>
+              </div>
+            </div>
+
+            <div class="agent-item" data-agent="festival_expert">
+              <div class="agent-avatar" style="background: #8b5cf6">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <div class="agent-info">
+                <h4>节庆师傅</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>掌握传统节庆文化</p>
+              </div>
+            </div>
+
+            <div class="agent-item" data-agent="tea_culture_expert">
+              <div class="agent-avatar" style="background: #16a085">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="agent-info">
+                <h4>茶艺师傅</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>精通茶艺与茶道</p>
+              </div>
+            </div>
+
+            <div class="agent-item" data-agent="craft_expert">
+              <div class="agent-avatar" style="background: #f39c12">
+                <i class="fas fa-hammer"></i>
+              </div>
+              <div class="agent-info">
+                <h4>工艺师傅</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>了解传统工艺技艺</p>
+              </div>
+            </div>
+
+            <div class="agent-item" data-agent="literature_expert">
+              <div class="agent-avatar" style="background: #9b59b6">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="agent-info">
+                <h4>文师傅</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>精通古典诗词文学</p>
+              </div>
+            </div>
+
+            <div class="agent-item" data-agent="tcm_expert">
+              <div class="agent-avatar" style="background: #e74c3c">
+                <i class="fas fa-heart"></i>
+              </div>
+              <div class="agent-info">
+                <h4>老中医师傅</h4>
+                <p class="online-status"><span class="online-dot"></span> 在线</p>
+                <p>精通中医养生文化</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 主聊天区域 -->
+      <div class="chat-main">
+        <!-- 聊天头部 -->
+        <div class="chat-header">
+          <div class="chat-agent-info">
+            <div
+              class="chat-agent-avatar"
+              id="current-agent-avatar"
+              style="background: linear-gradient(135deg, #c41e3a, #ffc107)"
+            >
+              <i class="fas fa-robot"></i>
+            </div>
+            <div class="chat-agent-details">
+              <h3 id="current-agent-name">选择专家开始对话</h3>
+              <p id="current-agent-desc">请从左侧选择一位专家</p>
+            </div>
+          </div>
+
+          <div class="chat-actions">
+            <button class="chat-action-btn" id="clear-chat" title="清空对话">
+              <i class="fas fa-trash"></i>
+            </button>
+            <button
+              class="chat-action-btn"
+              id="toggle-sidebar"
+              title="切换侧边栏"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 消息区域 -->
+        <div class="messages-container" id="messages-container">
+          <div class="welcome-screen" id="welcome-screen">
+            <div class="welcome-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h2 class="welcome-title">欢迎来到广府非遗文化平台</h2>
+            <p class="welcome-subtitle">选择一位专家开始您的文化探索之旅</p>
+            
+            <!-- 专家介绍 -->
+            <div class="experts-intro">
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #f59e0b">
+                  <i class="fas fa-theater-masks"></i>
+                </div>
+                <h3>粤剧大师</h3>
+                <p>深谙粤剧艺术精髓，熟悉传统剧目、表演技巧和历史传承，能为您详细解读粤剧的文化内涵和艺术价值。</p>
+              </div>
+              
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #10b981">
+                  <i class="fas fa-building"></i>
+                </div>
+                <h3>建筑师傅</h3>
+                <p>专精广府传统建筑艺术，了解骑楼、祠堂、园林等建筑特色，为您讲述建筑背后的文化故事和工艺传承。</p>
+              </div>
+              
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #ef4444">
+                  <i class="fas fa-utensils"></i>
+                </div>
+                <h3>美食师傅</h3>
+                <p>精通岭南饮食文化，熟悉粤菜制作工艺、食材搭配和文化寓意，带您品味舌尖上的广府文化。</p>
+              </div>
+              
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #8b5cf6">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3>节庆师傅</h3>
+                <p>掌握传统节庆文化知识，了解各种民俗活动、节日习俗和文化内涵，为您解读节庆背后的深厚文化底蕴。</p>
+              </div>
+              
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #16a085">
+                  <i class="fas fa-leaf"></i>
+                </div>
+                <h3>茶艺师傅</h3>
+                <p>精通广府茶艺茶道，熟悉各类茶叶品种、茶具鉴赏和饮茶习俗，带您领略茶文化的雅致与内涵。</p>
+              </div>
+              
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #f39c12">
+                  <i class="fas fa-palette"></i>
+                </div>
+                <h3>工艺师傅</h3>
+                <p>传承广府传统工艺，精通广绣、广彩、雕刻等精湛技艺，为您介绍传统手工艺的精湛技法与文化内涵。</p>
+              </div>
+              
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #9b59b6">
+                  <i class="fas fa-book"></i>
+                </div>
+                <h3>文师傅</h3>
+                <p>品读广府诗词文学，熟悉古典诗词、岭南文学和文学鉴赏，带您领略诗词文化的韵味与意境。</p>
+              </div>
+              
+              <div class="expert-card">
+                <div class="expert-icon" style="background: #e74c3c">
+                  <i class="fas fa-pills"></i>
+                </div>
+                <h3>老中医师傅</h3>
+                <p>解读中医养生智慧，了解中药方剂、食疗文化和养生保健，为您分享中医药文化的博大精深。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 输入区域 -->
+        <div class="input-container">
+          <div class="input-wrapper">
+            <textarea
+              class="input-field"
+              id="message-input"
+              placeholder="输入您的问题..."
+              rows="1"
+              disabled
+            ></textarea>
+            <button class="send-button" id="send-button" disabled>
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+          <!-- 预设问题 -->
+          <div class="suggested-questions" id="suggested-questions"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/chat.js"></script>
+  </body>
+</html>

@@ -1,0 +1,2762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>协同讨论 - 广府非遗文化平台</title>
+    <link href="/static/css/bootstrap-5.1.3.min.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/static/css/main.css" rel="stylesheet" />
+    <style>
+      /* 广府文化色彩系统 */
+      :root {
+        --primary-color: #c41e3a; /* 朱砂红 */
+        --secondary-color: #2d5016; /* 墨绿 */
+        --accent-color: #d4af37; /* 金黄 */
+        --cultural-blue: #4a90e2; /* 青花蓝 */
+        --text-primary: #2c3e50;
+        --text-secondary: #6c757d;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-tertiary: #fff8f0;
+        --border-color: rgba(196, 30, 58, 0.1);
+        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+        --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
+        --shadow-cultural: 0 6px 20px rgba(196, 30, 58, 0.15);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --spacing-xs: 8px;
+        --spacing-sm: 16px;
+        --spacing-md: 24px;
+        --spacing-lg: 32px;
+      }
+
+      /* 页面背景 */
+      body {
+        background: linear-gradient(
+          135deg,
+          var(--bg-tertiary) 0%,
+          var(--bg-secondary) 100%
+        );
+        min-height: 100vh;
+      }
+
+      /* 英雄区域 */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 100%
+        );
+        color: white;
+        padding: 120px 0 60px 0;
+        position: relative;
+        overflow: hidden;
+        margin-top: 70px;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+        animation: float 20s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 0;
+      }
+
+      /* 专家卡片 */
+      .experts-section {
+        padding: 60px 0;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        border-radius: 2px;
+      }
+
+      .expert-card {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .expert-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+      }
+
+      .expert-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-color);
+      }
+
+      .expert-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        box-shadow: var(--shadow-md);
+      }
+
+      .expert-icon i {
+        font-size: 2rem;
+        color: white;
+      }
+
+      .expert-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .expert-desc {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      /* 讨论区域 */
+      .discussion-container {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+      }
+
+      .discussion-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .discussion-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .discussion-area {
+        height: 500px;
+        overflow-y: auto;
+        padding: 1.5rem;
+        background: var(--bg-secondary);
+      }
+
+      /* 消息样式 */
+      .message {
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .message.user {
+        justify-content: flex-end;
+        margin-left: 65%;
+        flex-direction: row-reverse;
+      }
+
+      .message.user .message-content {
+        background: transparent;
+        color: white;
+        margin-left: 12px;
+        margin-right: 0;
+        border-radius: 30px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .message.user .message-content:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+          0 12px 40px rgba(74, 144, 226, 0.4),
+          0 6px 20px rgba(74, 144, 226, 0.3);
+      }
+
+      .message.user .message-avatar {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .message.user .message-avatar {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        margin-left: 0;
+        margin-right: 0;
+        box-shadow: 
+          0 6px 20px rgba(74, 144, 226, 0.3),
+          0 3px 10px rgba(74, 144, 226, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .message.user .message-avatar:hover {
+        transform: scale(1.1);
+        box-shadow: 
+          0 8px 25px rgba(74, 144, 226, 0.4),
+          0 4px 15px rgba(74, 144, 226, 0.3);
+      }
+
+      .message.ai .message-avatar {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+      }
+
+      .message-content {
+        flex: 1;
+        max-width: 85%;
+      }
+
+      .message.user .message-content {
+        max-width: 80%;
+      }
+
+      .message.ai .message-content {
+        max-width: 85%;
+      }
+
+      .message-bubble {
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        position: relative;
+      }
+
+      .message.user .message-bubble {
+        background: linear-gradient(
+          135deg,
+          var(--cultural-blue),
+          rgba(197, 246, 167, 0.9)
+        );
+        color: white;
+        border-radius: 30px;
+        border-bottom-right-radius: 10px;
+        padding: 1.2rem 1.8rem;
+        box-shadow: 
+          0 8px 32px rgba(74, 144, 226, 0.3),
+          0 4px 16px rgba(74, 144, 226, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .message.ai .message-bubble {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-bottom-left-radius: 4px;
+      }
+
+      .message.user .message-text {
+        margin: 0;
+        line-height: 1.7;
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        word-wrap: break-word;
+        letter-spacing: 0.3px;
+      }
+
+      .message-text {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .message-time {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin-top: 0.5rem;
+      }
+
+      .message.user .message-time {
+        text-align: right;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        margin-top: 0.8rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        display: inline-block;
+        margin-left: auto;
+      }
+
+      .message.ai .message-time {
+        color: var(--text-secondary);
+      }
+
+      .expert-name-tag {
+        display: inline-block;
+        background: var(--accent-color);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      /* 不同专家的个性化样式 */
+      .expert-name-tag.opera-expert {
+        background: linear-gradient(135deg, #c41e3a, #d4af37);
+      }
+
+      .expert-name-tag.architecture-expert {
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+      }
+
+      .expert-name-tag.culinary-expert {
+        background: linear-gradient(135deg, #ff6b35, #f7931e);
+      }
+
+      .expert-name-tag.festival-expert {
+        background: linear-gradient(135deg, #8e44ad, #e74c3c);
+      }
+
+      .expert-name-tag.ambassador {
+        background: linear-gradient(135deg, #d4af37, #c41e3a);
+      }
+
+      /* 专家消息气泡个性化 - 增强浅色系背景 */
+      .message.ai.opera-expert .message-bubble {
+        border-left: 4px solid #c41e3a;
+        background: linear-gradient(135deg, #fef7f7, #fff0f0, #ffffff);
+        box-shadow: 0 2px 8px rgba(196, 30, 58, 0.08);
+      }
+
+      .message.ai.architecture-expert .message-bubble {
+        border-left: 4px solid #2d5016;
+        background: linear-gradient(135deg, #f7faf7, #f0f8f0, #ffffff);
+        box-shadow: 0 2px 8px rgba(45, 80, 22, 0.08);
+      }
+
+      .message.ai.culinary-expert .message-bubble {
+        border-left: 4px solid #ff6b35;
+        background: linear-gradient(135deg, #fff9f5, #fff5f0, #ffffff);
+        box-shadow: 0 2px 8px rgba(255, 107, 53, 0.08);
+      }
+
+      .message.ai.festival-expert .message-bubble {
+        border-left: 4px solid #8e44ad;
+        background: linear-gradient(135deg, #faf7ff, #f8f0ff, #ffffff);
+        box-shadow: 0 2px 8px rgba(142, 68, 173, 0.08);
+      }
+
+      .message.ai.ambassador .message-bubble {
+        border-left: 4px solid #d4af37;
+        background: linear-gradient(135deg, #fffef7, #fffbf0, #ffffff);
+        box-shadow: 0 2px 8px rgba(212, 175, 55, 0.12);
+      }
+
+      /* 内容类型特殊样式 */
+      .message-bubble.content-introduction {
+        background: linear-gradient(135deg, #f8fbff, #f0f7ff, #ffffff) !important;
+        border-left-color: #4a90e2 !important;
+      }
+
+      .message-bubble.content-recommendation {
+        background: linear-gradient(135deg, #f7fff7, #f0fff0, #ffffff) !important;
+        border-left-color: #28a745 !important;
+      }
+
+      .message-bubble.content-tutorial {
+        background: linear-gradient(135deg, #fffaf0, #fff5e6, #ffffff) !important;
+        border-left-color: #ffc107 !important;
+      }
+
+      .message-bubble.content-cultural {
+        background: linear-gradient(135deg, #fff0f8, #ffe6f2, #ffffff) !important;
+        border-left-color: #e83e8c !important;
+      }
+
+      .message-bubble.content-historical {
+        background: linear-gradient(135deg, #f5f0ff, #ede0ff, #ffffff) !important;
+        border-left-color: #6f42c1 !important;
+      }
+
+      /* 消息操作按钮样式 */
+      .message-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .message:hover .message-actions {
+        opacity: 1;
+      }
+
+      .action-btn {
+        background: none;
+        border: none;
+        padding: 6px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .action-btn:hover {
+        background: var(--bg-secondary);
+        color: var(--primary-color);
+        transform: translateY(-1px);
+      }
+
+      .action-btn.copy-btn:hover {
+        color: #28a745;
+      }
+
+      .action-btn.voice-btn:hover {
+        color: #007bff;
+      }
+
+      .action-btn.copied {
+        color: #28a745;
+        background: rgba(40, 167, 69, 0.1);
+      }
+
+      .action-btn.playing {
+        color: #007bff;
+        background: rgba(0, 123, 255, 0.1);
+      }
+
+      /* 段落样式优化 */
+      .message-paragraph {
+        margin: 8px 0;
+        padding: 8px 12px;
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .message-paragraph:hover {
+        background: rgba(0, 0, 0, 0.02);
+        transform: translateX(2px);
+      }
+
+      .paragraph-icon {
+        color: var(--accent-color);
+        font-size: 0.8rem;
+        margin-top: 2px;
+        flex-shrink: 0;
+        opacity: 0.7;
+      }
+
+      .paragraph-content {
+        flex: 1;
+        line-height: 1.6;
+      }
+
+      /* 不同类型段落的个性化样式 */
+      .perspective-paragraph {
+        border-left: 3px solid #17a2b8;
+        background: linear-gradient(
+          90deg,
+          rgba(23, 162, 184, 0.05),
+          transparent
+        );
+      }
+
+      .perspective-paragraph .paragraph-icon {
+        color: #17a2b8;
+      }
+
+      .expert-paragraph {
+        border-left: 3px solid #28a745;
+        background: linear-gradient(
+          90deg,
+          rgba(40, 167, 69, 0.05),
+          transparent
+        );
+      }
+
+      .expert-paragraph .paragraph-icon {
+        color: #28a745;
+      }
+
+      .culture-paragraph {
+        border-left: 3px solid #dc3545;
+        background: linear-gradient(
+          90deg,
+          rgba(220, 53, 69, 0.05),
+          transparent
+        );
+      }
+
+      .culture-paragraph .paragraph-icon {
+        color: #dc3545;
+      }
+
+      .suggestion-paragraph {
+        border-left: 3px solid #ffc107;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 193, 7, 0.05),
+          transparent
+        );
+      }
+
+      .suggestion-paragraph .paragraph-icon {
+        color: #ffc107;
+      }
+
+      .opening-paragraph {
+        border-left: 3px solid var(--primary-color);
+        background: linear-gradient(
+          90deg,
+          rgba(74, 144, 226, 0.05),
+          transparent
+        );
+        font-weight: 500;
+      }
+
+      .opening-paragraph .paragraph-icon {
+        color: var(--primary-color);
+      }
+
+      .closing-paragraph {
+        border-left: 3px solid var(--accent-color);
+        background: linear-gradient(
+          90deg,
+          rgba(212, 175, 55, 0.05),
+          transparent
+        );
+        font-style: italic;
+      }
+
+      .closing-paragraph .paragraph-icon {
+        color: var(--accent-color);
+      }
+
+      /* 欢迎消息 */
+      .welcome-message {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--text-secondary);
+      }
+
+      .welcome-message i {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .welcome-message h5 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      /* 输入区域 */
+      .input-section {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(248, 250, 252, 0.98) 100%
+        );
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(196, 30, 58, 0.1);
+        padding: 2rem;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+      }
+
+      .input-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 50%,
+          var(--cultural-blue) 100%
+        );
+      }
+
+      .input-group-custom {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .message-input {
+        flex: 1;
+        padding: 18px 28px 18px 55px;
+        border: 2px solid transparent;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(248, 250, 252, 0.98) 100%
+        );
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08),
+          0 2px 8px rgba(196, 30, 58, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        position: relative;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        backdrop-filter: blur(8px);
+        border: 2px solid rgba(196, 30, 58, 0.08);
+      }
+
+      .message-input::placeholder {
+        color: rgba(107, 114, 128, 0.7);
+        font-weight: 400;
+        transition: all 0.3s ease;
+        font-style: italic;
+      }
+
+      .input-group-custom::before {
+        content: "\f075";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        left: 22px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        font-size: 1.3rem;
+        z-index: 2;
+        transition: all 0.3s ease;
+        opacity: 0.8;
+      }
+
+      .message-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 10px 30px rgba(196, 30, 58, 0.2),
+          0 0 0 6px rgba(196, 30, 58, 0.08),
+          0 4px 15px rgba(212, 175, 55, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        transform: translateY(-3px);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.98) 0%,
+          rgba(248, 250, 252, 1) 100%
+        );
+        border-radius: 32px;
+      }
+
+      .message-input:focus::placeholder {
+        color: rgba(107, 114, 128, 0.4);
+        transform: translateX(8px);
+      }
+
+      .input-group-custom:focus-within::before {
+        color: var(--accent-color);
+        transform: translateY(-50%) scale(1.15);
+        text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+      }
+
+      .input-section .send-button {
+        padding: 18px 32px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 50%,
+          #e91e63 100%
+        );
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 25px rgba(196, 30, 58, 0.35),
+          0 4px 12px rgba(212, 175, 55, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        position: relative;
+        overflow: hidden;
+        min-width: 130px;
+        backdrop-filter: blur(8px);
+      }
+
+      .input-section .send-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.6s ease;
+      }
+
+      .input-section .send-button:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 12px 35px rgba(196, 30, 58, 0.45),
+          0 6px 18px rgba(212, 175, 55, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        background: linear-gradient(
+          135deg,
+          #d91e4a 0%,
+          var(--accent-color) 50%,
+          #e91e63 100%
+        );
+        border-radius: 32px;
+      }
+
+      .input-section .send-button:hover::before {
+        left: 100%;
+      }
+
+      .input-section .send-button:active {
+        transform: translateY(-1px) scale(0.98);
+        transition: all 0.1s ease;
+      }
+
+      .input-section .send-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* 移除之前的按钮样式覆盖，使用默认的main.css样式 */
+
+      /* 输入框动画效果 */
+      @keyframes inputFocus {
+        0% {
+          transform: translateY(0) scale(1);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        100% {
+          transform: translateY(-2px) scale(1.01);
+          box-shadow: 0 8px 25px rgba(196, 30, 58, 0.15);
+        }
+      }
+
+      @keyframes buttonPulse {
+        0%,
+        100% {
+          box-shadow: 0 6px 20px rgba(196, 30, 58, 0.3);
+        }
+        50% {
+          box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4);
+        }
+      }
+
+      @keyframes iconBounce {
+        0%,
+        100% {
+          transform: translateY(-50%) scale(1);
+        }
+        50% {
+          transform: translateY(-50%) scale(1.1);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .message-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 8px 25px rgba(196, 30, 58, 0.15),
+          0 0 0 4px rgba(196, 30, 58, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(248, 250, 252, 1) 100%
+        );
+        animation: inputFocus 0.3s ease-out;
+      }
+
+      .input-section .send-button:not(:disabled):hover {
+        animation: buttonPulse 2s ease-in-out infinite;
+      }
+
+      .input-group-custom:focus-within::before {
+        color: var(--accent-color);
+        transform: translateY(-50%) scale(1.1);
+        animation: iconBounce 0.6s ease-in-out;
+      }
+
+      /* 发送按钮加载状态 */
+      .input-section .send-button.loading {
+        background: linear-gradient(
+          90deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 25%,
+          var(--primary-color) 50%,
+          var(--accent-color) 75%,
+          var(--primary-color) 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      .input-section .send-button.loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      /* 输入框呼吸效果 */
+      .message-input:not(:focus):hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
+      }
+
+      /* 输入区域整体动画 */
+      .input-section {
+        animation: slideUp 0.6s ease-out;
+      }
+
+      @keyframes slideUp {
+        0% {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* 字符计数器样式 */
+      .input-counter {
+        position: absolute;
+        right: 150px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        background: rgba(255, 255, 255, 0.95);
+        padding: 6px 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(196, 30, 58, 0.08);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .input-counter.warning {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+        background: rgba(212, 175, 55, 0.1);
+        box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15);
+      }
+
+      .input-counter.danger {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+        background: rgba(196, 30, 58, 0.1);
+        box-shadow: 0 2px 8px rgba(196, 30, 58, 0.15);
+      }
+
+      /* 输入提示样式 */
+      .input-tips {
+        margin-top: 16px;
+        padding: 12px 20px;
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.08) 0%,
+          rgba(248, 250, 252, 0.95) 100%
+        );
+        border-left: 4px solid var(--accent-color);
+        border-radius: 0 16px 16px 0;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        animation: fadeIn 0.5s ease-out;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 12px rgba(212, 175, 55, 0.1);
+      }
+
+      .input-tips i {
+        color: var(--accent-color);
+        margin-right: 8px;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 统计卡片 */
+      .stats-section {
+        padding: 40px 0;
+      }
+
+      .stat-card {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      /* 加载动画样式 */
+      .loading-animation {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 0;
+      }
+
+      .loading-dots {
+        display: flex;
+        gap: 4px;
+      }
+
+      .loading-dots span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        animation: loading-bounce 1.4s ease-in-out infinite both;
+      }
+
+      .loading-dots span:nth-child(1) {
+        animation-delay: -0.32s;
+      }
+      .loading-dots span:nth-child(2) {
+        animation-delay: -0.16s;
+      }
+      .loading-dots span:nth-child(3) {
+        animation-delay: 0s;
+      }
+
+      @keyframes loading-bounce {
+        0%,
+        80%,
+        100% {
+          transform: scale(0);
+          opacity: 0.5;
+        }
+        40% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .loading-text {
+        font-size: 14px;
+        color: #666;
+        font-style: italic;
+      }
+
+      /* 流式输出时的光标效果 */
+      .message-text.streaming::after {
+        content: "|";
+        animation: cursor-blink 1s infinite;
+        color: #667eea;
+      }
+
+      @keyframes cursor-blink {
+        0%,
+        50% {
+          opacity: 1;
+        }
+        51%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        .hero-section {
+          padding: 100px 0 40px 0;
+        }
+
+        .hero-title {
+          font-size: 2rem;
+        }
+
+        .experts-section,
+        .stats-section {
+          padding: 40px 0;
+        }
+
+        .expert-card {
+          margin-bottom: 1.5rem;
+        }
+
+        .discussion-area {
+          height: 400px;
+        }
+
+        .message-content {
+          max-width: 90%;
+        }
+
+        .message.user .message-content {
+          max-width: 88%;
+        }
+
+        .message.ai .message-content {
+          max-width: 90%;
+        }
+
+        .input-group-custom {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .message-input {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 现代化导航栏 -->
+    <nav class="modern-navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <i class="fas fa-dragon"></i>
+          <span>广府非遗</span>
+        </div>
+        <div class="nav-menu">
+          <a href="/" class="nav-link">首页</a>
+          <a href="/chat" class="nav-link">行家交流</a>
+          <a href="/collaboration" class="nav-link active">协作讨论</a>
+          <button class="btn-modern" onclick="location.href='/features'">
+            功能中心
+          </button>
+          <a href="/about" class="nav-link">关于</a>
+        </div>
+        <div class="nav-actions"></div>
+      </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="text-center">
+          <h1 class="hero-title">
+            <i class="fas fa-users me-3"></i>
+            多智能体协同讨论
+          </h1>
+          <p class="hero-subtitle">
+            汇聚广府文化各领域专家智慧，为您提供全方位的文化解读与交流
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 参与专家 -->
+    <section class="experts-section">
+      <div class="container">
+        <h2 class="section-title">参与讨论的专家</h2>
+        <div class="row g-4">
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-theater-masks"></i>
+              </div>
+              <h5 class="expert-name">粤剧专家</h5>
+              <p class="expert-desc">精通粤剧艺术传承与表演技艺</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-building"></i>
+              </div>
+              <h5 class="expert-name">建筑专家</h5>
+              <p class="expert-desc">深谙岭南建筑文化与工艺</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <h5 class="expert-name">美食专家</h5>
+              <p class="expert-desc">熟悉粤菜文化与烹饪精髓</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <h5 class="expert-name">节庆专家</h5>
+              <p class="expert-desc">掌握传统节庆民俗文化</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <h5 class="expert-name">茶文化专家</h5>
+              <p class="expert-desc">精通茶艺茶道与品茶文化</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-palette"></i>
+              </div>
+              <h5 class="expert-name">手工艺专家</h5>
+              <p class="expert-desc">传承广绣广彩雕刻技艺</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-book"></i>
+              </div>
+              <h5 class="expert-name">诗词文学专家</h5>
+              <p class="expert-desc">品读古典诗词岭南文学</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="expert-card">
+              <div class="expert-icon">
+                <i class="fas fa-pills"></i>
+              </div>
+              <h5 class="expert-name">中医药专家</h5>
+              <p class="expert-desc">解读中医理论与养生智慧</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 协同讨论界面 -->
+    <section class="py-5">
+      <div class="container">
+        <div class="discussion-container">
+          <div class="discussion-header">
+            <h3>
+              <i class="fas fa-comments me-2"></i>
+              智能体协同讨论
+            </h3>
+          </div>
+
+          <!-- 讨论区域 -->
+          <div class="discussion-area" id="discussion-area">
+            <div class="welcome-message">
+              <i class="fas fa-dragon fa-4x"></i>
+              <h5>欢迎来到广府文化协同讨论</h5>
+              <p>提出您的问题，我们的专家团队将为您提供专业而全面的文化解读</p>
+            </div>
+          </div>
+
+          <!-- 输入区域 -->
+          <div class="input-section">
+            <div class="input-group-custom">
+              <input
+                type="text"
+                class="message-input"
+                id="collaboration-input"
+                placeholder="请输入您想了解的广府文化问题..."
+                maxlength="500"
+              />
+              <div class="input-counter">
+                <span id="char-count">0</span>/500
+              </div>
+              <button class="send-button" id="collaboration-send">
+                <i class="fas fa-paper-plane me-2"></i>发送
+              </button>
+            </div>
+            <div class="input-tips">
+              <i class="fas fa-lightbulb me-1"></i>
+              <span
+                >提示：您可以询问关于粤剧、建筑、美食、节庆等广府文化相关问题</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 讨论统计 -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="stat-card">
+              <i
+                class="fas fa-comments stat-icon"
+                style="color: var(--primary-color)"
+              ></i>
+              <div
+                class="stat-number"
+                style="color: var(--primary-color)"
+                id="message-count"
+              >
+                0
+              </div>
+              <div class="stat-label">讨论消息</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <i
+                class="fas fa-users stat-icon"
+                style="color: var(--accent-color)"
+              ></i>
+              <div
+                class="stat-number"
+                style="color: var(--accent-color)"
+                id="expert-count"
+              >
+                4
+              </div>
+              <div class="stat-label">参与专家</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <i
+                class="fas fa-clock stat-icon"
+                style="color: var(--cultural-blue)"
+              ></i>
+              <div
+                class="stat-number"
+                style="color: var(--cultural-blue)"
+                id="discussion-time"
+              >
+                0
+              </div>
+              <div class="stat-label">讨论时长(分钟)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 现代化页脚 -->
+    <footer class="modern-footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="brand-logo">
+              <i class="fas fa-dragon"></i>
+              <span>广府非遗文化智能问答系统</span>
+            </div>
+            <p class="brand-desc">传承千年文化，连接现代科技</p>
+          </div>
+          <div class="footer-links">
+            <div class="link-group">
+              <h6>文化领域</h6>
+              <a href="#">粤剧艺术</a>
+              <a href="#">传统建筑</a>
+              <a href="#">广府美食</a>
+              <a href="#">节庆民俗</a>
+            </div>
+            <div class="link-group">
+              <h6>支持与帮助</h6>
+              <a href="#">使用指南</a>
+              <a href="#">常见问题</a>
+              <a href="#">联系我们</a>
+              <a href="#">意见反馈</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2024 广府非遗文化传承平台. 致力于传统文化的数字化传承与发展.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/static/js/bootstrap-5.1.3.bundle.min.js"></script>
+    <script>
+      // 协作讨论功能
+      class CollaborationChat {
+        constructor() {
+          this.messageCount = 0;
+          this.startTime = Date.now();
+          this.experts = [
+            { name: "粤剧专家", icon: "fas fa-theater-masks" },
+            { name: "建筑专家", icon: "fas fa-building" },
+            { name: "美食专家", icon: "fas fa-utensils" },
+            { name: "节庆专家", icon: "fas fa-calendar-alt" },
+            { name: "茶文化专家", icon: "fas fa-leaf" },
+            { name: "手工艺专家", icon: "fas fa-palette" },
+            { name: "诗词文学专家", icon: "fas fa-book" },
+            { name: "中医药专家", icon: "fas fa-pills" },
+          ];
+          this.guangfuAmbassador = {
+            name: "广府文化助手",
+            icon: "fas fa-crown",
+          };
+          this.init();
+          this.updateTimer();
+        }
+
+        init() {
+          console.log("=== CollaborationChat init 开始 ==="); // 调试日志
+          const input = document.getElementById("collaboration-input");
+          const sendBtn = document.getElementById("collaboration-send");
+          const charCount = document.getElementById("char-count");
+          const inputCounter = document.querySelector(".input-counter");
+
+          console.log("获取到的元素:", {
+            input,
+            sendBtn,
+            charCount,
+            inputCounter,
+          }); // 调试日志
+
+          if (!sendBtn) {
+            console.error("找不到发送按钮元素！");
+            return;
+          }
+
+          if (!input) {
+            console.error("找不到输入框元素！");
+            return;
+          }
+
+          console.log("绑定点击事件"); // 调试日志
+          sendBtn.addEventListener("click", () => {
+            console.log("发送按钮被点击"); // 调试日志
+            this.sendMessage();
+          });
+
+          console.log("绑定回车事件"); // 调试日志
+          input.addEventListener("keypress", (e) => {
+            console.log("按键事件:", e.key); // 调试日志
+            if (e.key === "Enter") {
+              console.log("回车键被按下，调用sendMessage"); // 调试日志
+              this.sendMessage();
+            }
+          });
+
+          // 字符计数功能
+          input.addEventListener("input", (e) => {
+            const length = e.target.value.length;
+            charCount.textContent = length;
+
+            // 根据字符数量改变样式
+            inputCounter.classList.remove("warning", "danger");
+            if (length > 400) {
+              inputCounter.classList.add("danger");
+            } else if (length > 300) {
+              inputCounter.classList.add("warning");
+            }
+          });
+        }
+
+        async sendMessage() {
+          console.log("=== sendMessage 函数开始执行 ==="); // 调试日志
+          const input = document.getElementById("collaboration-input");
+          const sendBtn = document.getElementById("collaboration-send");
+          const message = input.value.trim();
+
+          console.log("发送消息:", message); // 调试日志
+          console.log("输入框元素:", input); // 调试日志
+          console.log("发送按钮元素:", sendBtn); // 调试日志
+
+          if (!message) {
+            console.log("消息为空，返回"); // 调试日志
+            return;
+          }
+
+          console.log("开始设置加载状态"); // 调试日志
+          // 添加加载状态
+          sendBtn.classList.add("loading");
+          sendBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin me-2"></i>发送中...';
+          sendBtn.disabled = true;
+          input.disabled = true;
+          console.log("加载状态设置完成"); // 调试日志
+
+          // 添加用户消息
+          console.log("添加用户消息到聊天框"); // 调试日志
+          this.addMessage(message, "user", null, false);
+          input.value = "";
+
+          // 更新字符计数
+          document.getElementById("char-count").textContent = "0";
+
+          try {
+            // 启动协同讨论
+            await this.startCollaborativeDiscussion(message);
+          } catch (error) {
+            console.error("协同讨论失败:", error);
+          } finally {
+            // 恢复按钮状态
+            sendBtn.classList.remove("loading");
+            sendBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>发送';
+            sendBtn.disabled = false;
+            input.disabled = false;
+            input.focus();
+          }
+        }
+
+        // 添加文本格式化函数
+        formatText(text) {
+          if (!text) return "";
+
+          // 智能分段：根据语义和标点符号自动分段
+          let formatted = this.smartParagraphSplit(text);
+
+          // 处理Markdown格式
+          formatted = formatted
+            // 处理粗体 **text** 或 __text__
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/__(.*?)__/g, "<strong>$1</strong>")
+            // 处理斜体 *text* 或 _text_
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            .replace(/_(.*?)_/g, "<em>$1</em>")
+            // 处理代码块 `code`
+            .replace(/`([^`]+)`/g, "<code>$1</code>")
+            // 处理换行
+            .replace(/\n/g, "<br>")
+            // 处理列表项 - item 或 * item
+            .replace(/^[\-\*]\s+(.+)$/gm, "<li>$1</li>")
+            // 处理数字列表 1. item
+            .replace(/^\d+\.\s+(.+)$/gm, "<li>$1</li>");
+
+          // 包装列表项
+          formatted = formatted.replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>");
+
+          // 添加段落样式和图标装饰
+          formatted = this.enhanceTextDisplay(formatted);
+
+          return formatted;
+        }
+
+        // 智能检测内容类型
+        detectContentType(text) {
+          if (!text) return null;
+
+          // 检测介绍类内容
+          if (text.match(/介绍|简介|概述|什么是|关于|历史|起源|发展/)) {
+            return 'introduction';
+          }
+
+          // 检测推荐类内容
+          if (text.match(/推荐|建议|值得|不妨|可以试试|推荐您|建议您/)) {
+            return 'recommendation';
+          }
+
+          // 检测教程类内容
+          if (text.match(/步骤|方法|如何|怎么|教程|指南|操作|制作|学习/)) {
+            return 'tutorial';
+          }
+
+          // 检测文化类内容
+          if (text.match(/文化|传统|习俗|风俗|民俗|艺术|精神|内涵|意义/)) {
+            return 'culture';
+          }
+
+          // 检测历史类内容
+          if (text.match(/历史|古代|朝代|年代|时期|过去|以前|传说|故事/)) {
+            return 'history';
+          }
+
+          return null;
+        }
+
+        // 智能分段函数
+        smartParagraphSplit(text) {
+          if (!text) return "";
+
+          // 定义分段规则
+          const paragraphBreakers = [
+            // 句号后跟空格和大写字母或中文
+            /([。！？])\s*([A-Z\u4e00-\u9fa5])/g,
+            // 冒号后的内容（通常是解释或列举）
+            /([：:])\s*([A-Z\u4e00-\u9fa5])/g,
+            // 分号后的内容
+            /([；;])\s*([A-Z\u4e00-\u9fa5])/g,
+            // 问号或感叹号后
+            /([？！?!])\s*([A-Z\u4e00-\u9fa5])/g,
+          ];
+
+          let result = text;
+
+          // 应用分段规则
+          paragraphBreakers.forEach((rule) => {
+            result = result.replace(rule, "$1\n\n$2");
+          });
+
+          // 处理特殊情况：数字序号开头的内容
+          result = result.replace(
+            /([。！？])\s*([一二三四五六七八九十1-9]\s*[、.])/g,
+            "$1\n\n$2"
+          );
+
+          // 处理"从...角度"、"作为..."等开头的句子
+          result = result.replace(
+            /([。！？])\s*(从[^，。！？]*?角度|作为[^，。！？]*?|在[^，。！？]*?方面)/g,
+            "$1\n\n$2"
+          );
+
+          // 清理多余的换行
+          result = result.replace(/\n{3,}/g, "\n\n");
+
+          return result.trim();
+        }
+
+        // 增强文本显示效果
+        enhanceTextDisplay(text) {
+          if (!text) return "";
+
+          // 分割段落
+          const paragraphs = text.split(/\n\s*\n/);
+
+          if (paragraphs.length <= 1) {
+            return `<div class="message-paragraph">${text}</div>`;
+          }
+
+          // 为每个段落添加样式和装饰
+          const enhancedParagraphs = paragraphs
+            .map((paragraph, index) => {
+              if (!paragraph.trim()) return "";
+
+              let icon = "";
+              let className = "message-paragraph";
+
+              // 根据段落内容添加相应图标
+              if (paragraph.includes("从") && paragraph.includes("角度")) {
+                icon = '<i class="fas fa-eye paragraph-icon"></i>';
+                className += " perspective-paragraph";
+              } else if (
+                paragraph.includes("作为") ||
+                paragraph.includes("专家")
+              ) {
+                icon = '<i class="fas fa-user-graduate paragraph-icon"></i>';
+                className += " expert-paragraph";
+              } else if (
+                paragraph.includes("传统") ||
+                paragraph.includes("文化")
+              ) {
+                icon = '<i class="fas fa-landmark paragraph-icon"></i>';
+                className += " culture-paragraph";
+              } else if (
+                paragraph.includes("建议") ||
+                paragraph.includes("推荐")
+              ) {
+                icon = '<i class="fas fa-lightbulb paragraph-icon"></i>';
+                className += " suggestion-paragraph";
+              } else if (index === 0) {
+                icon = '<i class="fas fa-quote-left paragraph-icon"></i>';
+                className += " opening-paragraph";
+              } else if (index === paragraphs.length - 1) {
+                icon = '<i class="fas fa-quote-right paragraph-icon"></i>';
+                className += " closing-paragraph";
+              } else {
+                icon = '<i class="fas fa-circle paragraph-icon"></i>';
+              }
+
+              return `<div class="${className}">${icon}<span class="paragraph-content">${paragraph.trim()}</span></div>`;
+            })
+            .filter((p) => p);
+
+          return enhancedParagraphs.join("");
+        }
+
+        addMessage(message, type, expertName, isAmbassador) {
+          if (expertName === undefined) expertName = null;
+          if (isAmbassador === undefined) isAmbassador = false;
+          const discussionArea = document.getElementById("discussion-area");
+          const welcomeMessage =
+            discussionArea.querySelector(".welcome-message");
+
+          if (welcomeMessage) {
+            welcomeMessage.remove();
+          }
+
+          const messageDiv = document.createElement("div");
+          messageDiv.className = `message ${type}`;
+
+          // 为不同专家添加个性化CSS类
+          if (type === "ai" && expertName) {
+            if (expertName === "粤剧专家") {
+              messageDiv.classList.add("opera-expert");
+            } else if (expertName === "建筑专家") {
+              messageDiv.classList.add("architecture-expert");
+            } else if (expertName === "美食专家") {
+              messageDiv.classList.add("culinary-expert");
+            } else if (expertName === "茶文化专家") {
+              messageDiv.classList.add("tea-culture-expert");
+            } else if (expertName === "手工艺专家") {
+              messageDiv.classList.add("craft-expert");
+            } else if (expertName === "诗词文学专家") {
+              messageDiv.classList.add("literature-expert");
+            } else if (expertName === "中医药专家") {
+              messageDiv.classList.add("tcm-expert");
+            } else if (expertName === "节庆专家") {
+              messageDiv.classList.add("festival-expert");
+            }
+          }
+
+          if (isAmbassador) {
+            messageDiv.classList.add("ambassador");
+          }
+
+          const avatar = document.createElement("div");
+          avatar.className = "message-avatar";
+
+          if (type === "user") {
+            avatar.innerHTML = '<i class="fas fa-user"></i>';
+          } else if (isAmbassador) {
+            avatar.innerHTML = '<i class="fas fa-crown"></i>';
+            avatar.style.background =
+              "linear-gradient(135deg, #d4af37, #c41e3a)";
+          } else {
+            // 根据专家名称设置对应的图标
+            let expertIcon = "fas fa-robot";
+            if (expertName === "粤剧专家") {
+              expertIcon = "fas fa-theater-masks";
+            } else if (expertName === "建筑专家") {
+              expertIcon = "fas fa-building";
+            } else if (expertName === "美食专家") {
+              expertIcon = "fas fa-utensils";
+            } else if (expertName === "节庆专家") {
+              expertIcon = "fas fa-calendar-alt";
+            } else if (expertName === "茶文化专家") {
+              expertIcon = "fas fa-leaf";
+            } else if (expertName === "手工艺专家") {
+              expertIcon = "fas fa-hammer";
+            } else if (expertName === "诗词文学专家") {
+              expertIcon = "fas fa-book";
+            } else if (expertName === "中医药专家") {
+              expertIcon = "fas fa-pills";
+            }
+            avatar.innerHTML = `<i class="${expertIcon}"></i>`;
+          }
+
+          const content = document.createElement("div");
+          content.className = "message-content";
+
+          const bubble = document.createElement("div");
+          bubble.className = "message-bubble";
+
+          // 智能检测内容类型并添加相应样式
+          if (type === "ai" && message) {
+            const contentType = this.detectContentType(message);
+            if (contentType) {
+              bubble.classList.add(`content-${contentType}`);
+            }
+          }
+
+          if (expertName && type === "ai") {
+            const expertTag = document.createElement("div");
+            expertTag.className = "expert-name-tag";
+
+            // 为专家标签添加个性化样式类
+            if (expertName === "粤剧专家") {
+              expertTag.classList.add("opera-expert");
+            } else if (expertName === "建筑专家") {
+              expertTag.classList.add("architecture-expert");
+            } else if (expertName === "美食专家") {
+              expertTag.classList.add("culinary-expert");
+            } else if (expertName === "节庆专家") {
+              expertTag.classList.add("festival-expert");
+            } else if (expertName === "茶文化专家") {
+              expertTag.classList.add("tea-culture-expert");
+            } else if (expertName === "手工艺专家") {
+              expertTag.classList.add("craft-expert");
+            } else if (expertName === "诗词文学专家") {
+              expertTag.classList.add("literature-expert");
+            } else if (expertName === "中医药专家") {
+              expertTag.classList.add("tcm-expert");
+            }
+
+            expertTag.textContent = expertName;
+            if (isAmbassador) {
+              expertTag.classList.add("ambassador");
+            }
+            bubble.appendChild(expertTag);
+          }
+
+          const messageText = document.createElement("p");
+          messageText.className = "message-text";
+
+          // 使用格式化函数处理文本
+          if (type === "ai") {
+            messageText.innerHTML = this.formatText(message);
+          } else {
+            messageText.textContent = message;
+          }
+
+          const time = document.createElement("div");
+          time.className = "message-time";
+          time.textContent = new Date().toLocaleTimeString();
+
+          bubble.appendChild(messageText);
+          bubble.appendChild(time);
+
+          // 添加操作按钮
+          const actionsDiv = document.createElement("div");
+          actionsDiv.className = "message-actions";
+
+          // 复制按钮
+          const copyBtn = document.createElement("button");
+          copyBtn.className = "action-btn copy-btn";
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i> 复制';
+          copyBtn.onclick = () => this.copyMessage(messageText);
+
+          // 语音播放按钮
+          const voiceBtn = document.createElement("button");
+          voiceBtn.className = "action-btn voice-btn";
+          voiceBtn.innerHTML = '<i class="fas fa-volume-up"></i> 播放';
+          voiceBtn.onclick = () =>
+            this.playMessage(messageText.textContent, voiceBtn);
+
+          actionsDiv.appendChild(copyBtn);
+          actionsDiv.appendChild(voiceBtn);
+          bubble.appendChild(actionsDiv);
+
+          content.appendChild(bubble);
+
+          messageDiv.appendChild(avatar);
+          messageDiv.appendChild(content);
+
+          discussionArea.appendChild(messageDiv);
+          discussionArea.scrollTop = discussionArea.scrollHeight;
+
+          this.messageCount++;
+          document.getElementById("message-count").textContent =
+            this.messageCount;
+        }
+
+        async simulateMultiExpertResponse(userMessage) {
+          console.log("开始多专家回复流程"); // 调试日志
+
+          // 为每个专家创建流式回复
+          for (let index = 0; index < this.experts.length; index++) {
+            const expert = this.experts[index];
+            console.log(`准备调用专家: ${expert.name}`); // 调试日志
+
+            // 延迟显示，模拟思考时间
+            await new Promise((resolve) =>
+              setTimeout(resolve, (index + 1) * 1500)
+            );
+
+            // 添加加载动画
+            const loadingMessageId = this.addLoadingMessage(expert.name);
+            console.log(
+              `为专家 ${expert.name} 添加加载动画: ${loadingMessageId}`
+            ); // 调试日志
+
+            try {
+              // 调用流式API
+              console.log(`开始调用专家 ${expert.name} 的API`); // 调试日志
+              await this.streamExpertResponse(
+                userMessage,
+                expert.name,
+                loadingMessageId
+              );
+              console.log(`专家 ${expert.name} 回复完成`); // 调试日志
+            } catch (error) {
+              console.error(`${expert.name} 回复失败:`, error);
+              // 移除加载动画，显示错误信息
+              this.removeLoadingMessage(loadingMessageId);
+              this.addMessage(
+                "抱歉，我现在无法回答，请稍后再试。",
+                "ai",
+                expert.name,
+                false
+              );
+            }
+          }
+
+          // 最后一个专家回答后，广府文化助手进行总结
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          const ambassadorLoadingId = this.addLoadingMessage(
+            this.guangfuAmbassador.name,
+            true
+          );
+
+          try {
+            await this.streamExpertResponse(
+              userMessage,
+              this.guangfuAmbassador.name,
+              ambassadorLoadingId,
+              true
+            );
+          } catch (error) {
+            console.error("广府文化助手回复失败:", error);
+            this.removeLoadingMessage(ambassadorLoadingId);
+            this.addAmbassadorSummary(userMessage);
+          }
+        }
+
+        async startCollaborativeDiscussion(userMessage) {
+          console.log("开始协同讨论:", userMessage);
+
+          try {
+            const response = await fetch("/api/collaboration/stream", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                message: userMessage,
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let currentExpert = null;
+            let currentMessageElement = null;
+            let currentTextElement = null;
+
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+
+              const chunk = decoder.decode(value, { stream: true });
+              console.log("接收到chunk:", chunk); // 调试日志
+              const lines = chunk.split("\n");
+
+              for (const line of lines) {
+                if (line.trim() && line.startsWith("data: ")) {
+                  try {
+                    const jsonStr = line.slice(6).trim();
+                    console.log("解析JSON:", jsonStr); // 调试日志
+                    if (jsonStr) {
+                      const data = JSON.parse(jsonStr);
+                      console.log("解析后的数据:", data); // 调试日志
+
+                      if (data.type === "expert_start") {
+                        // 专家开始发言
+                        console.log("专家开始发言:", data.expert);
+                        currentExpert = data.expert;
+                        const isAmbassador = data.expert === "广府文化助手";
+                        const isSummary = data.is_summary || false;
+
+                        // 添加专家介绍提示
+                        if (!isSummary) {
+                          this.addExpertIntroduction(data.expert);
+                        } else {
+                          this.addSummaryIntroduction();
+                        }
+
+                        // 创建消息元素
+                        currentMessageElement = this.createStreamingMessage(
+                          data.expert,
+                          isAmbassador
+                        );
+                        currentTextElement =
+                          currentMessageElement.querySelector(".message-text");
+                      } else if (
+                        data.type === "chunk" &&
+                        data.content !== undefined
+                      ) {
+                        // 接收内容块
+                        console.log("接收内容块:", data.content);
+                        if (currentTextElement) {
+                          const currentContent =
+                            currentTextElement.textContent || "";
+                          currentTextElement.textContent =
+                            currentContent + data.content;
+
+                          // 滚动到底部
+                          const discussionArea =
+                            document.getElementById("discussion-area");
+                          discussionArea.scrollTop =
+                            discussionArea.scrollHeight;
+                        } else {
+                          console.warn("currentTextElement为空，无法显示内容");
+                        }
+                      } else if (data.type === "expert_done") {
+                        // 专家发言结束
+                        console.log("专家发言结束:", data.expert);
+                        if (currentTextElement) {
+                          currentTextElement.classList.remove("streaming");
+                          
+                          // 添加复制和播放按钮
+                          const bubble = currentTextElement.closest('.message-bubble');
+                          if (bubble && !bubble.querySelector('.message-actions')) {
+                            const actionsDiv = document.createElement("div");
+                            actionsDiv.className = "message-actions";
+
+                            // 创建复制按钮
+                            const copyBtn = document.createElement("button");
+                            copyBtn.className = "action-btn copy-btn";
+                            copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                            copyBtn.title = "复制内容";
+                            copyBtn.onclick = () => this.copyMessage(currentTextElement.textContent);
+
+                            // 创建语音播放按钮
+                            const voiceBtn = document.createElement("button");
+                            voiceBtn.className = "action-btn voice-btn";
+                            voiceBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                            voiceBtn.title = "语音播放";
+                            voiceBtn.onclick = () => this.playMessage(currentTextElement.textContent);
+
+                            actionsDiv.appendChild(copyBtn);
+                            actionsDiv.appendChild(voiceBtn);
+                            bubble.appendChild(actionsDiv);
+                          }
+                        }
+                        currentExpert = null;
+                        currentMessageElement = null;
+                        currentTextElement = null;
+                      } else if (data.type === "discussion_complete") {
+                        // 讨论完成
+                        console.log("协同讨论完成");
+                        this.addDiscussionComplete();
+                        return;
+                      } else if (data.type === "error") {
+                        throw new Error(data.message || "讨论过程中出现错误");
+                      }
+                    }
+                  } catch (parseError) {
+                    console.error(
+                      "解析响应数据失败:",
+                      parseError,
+                      "原始数据:",
+                      line
+                    );
+                  }
+                }
+              }
+            }
+          } catch (error) {
+            console.error("协同讨论失败:", error);
+            this.addMessage(
+              "抱歉，讨论过程中出现了问题，请稍后再试。",
+              "ai",
+              "系统提示",
+              false
+            );
+          }
+        }
+
+        addExpertIntroduction(expertName) {
+          const introductions = {
+            广府文化助手: "🎭 广府文化助手正在为您主持讨论...",
+            粤剧专家: "🎭 粤剧专家加入讨论...",
+            建筑专家: "🏛️ 建筑专家加入讨论...",
+            美食专家: "🍜 美食专家加入讨论...",
+            节庆专家: "🎊 节庆专家加入讨论...",
+            茶文化专家: "🍵 茶文化专家加入讨论...",
+            手工艺专家: "🎨 手工艺专家加入讨论...",
+            诗词文学专家: "📚 诗词文学专家加入讨论...",
+            中医药专家: "🌿 中医药专家加入讨论...",
+          };
+
+          const intro = introductions[expertName] || `${expertName}加入讨论...`;
+          this.addSystemMessage(intro);
+        }
+
+        addSummaryIntroduction() {
+          this.addSystemMessage("📝 广府文化助手正在为大家总结讨论内容...");
+        }
+
+        addDiscussionComplete() {
+          this.addSystemMessage(
+            "✨ 本次协同讨论圆满结束，感谢各位专家的精彩分享！"
+          );
+        }
+
+        addSystemMessage(content) {
+          const discussionArea = document.getElementById("discussion-area");
+          const systemDiv = document.createElement("div");
+          systemDiv.className = "system-message";
+          systemDiv.innerHTML = `
+            <div class="system-content">
+              <i class="fas fa-info-circle"></i>
+              <span>${content}</span>
+            </div>
+          `;
+          discussionArea.appendChild(systemDiv);
+          discussionArea.scrollTop = discussionArea.scrollHeight;
+        }
+
+        addLoadingMessage(expertName, isAmbassador) {
+          if (isAmbassador === undefined) isAmbassador = false;
+          const discussionArea = document.getElementById("discussion-area");
+          const welcomeMessage =
+            discussionArea.querySelector(".welcome-message");
+
+          if (welcomeMessage) {
+            welcomeMessage.remove();
+          }
+
+          const messageDiv = document.createElement("div");
+          messageDiv.className = `message ai loading-message`;
+          const messageId =
+            "loading-" +
+            Date.now() +
+            "-" +
+            Math.random().toString(36).substr(2, 9);
+          messageDiv.id = messageId;
+
+          // 为不同专家添加个性化CSS类
+          if (expertName === "粤剧专家") {
+            messageDiv.classList.add("opera-expert");
+          } else if (expertName === "建筑专家") {
+            messageDiv.classList.add("architecture-expert");
+          } else if (expertName === "美食专家") {
+            messageDiv.classList.add("culinary-expert");
+          } else if (expertName === "节庆专家") {
+            messageDiv.classList.add("festival-expert");
+          }
+
+          if (isAmbassador) {
+            messageDiv.classList.add("ambassador");
+          }
+
+          const avatar = document.createElement("div");
+          avatar.className = "message-avatar";
+
+          if (isAmbassador) {
+            avatar.innerHTML = '<i class="fas fa-crown"></i>';
+            avatar.style.background =
+              "linear-gradient(135deg, #d4af37, #c41e3a)";
+          } else {
+            // 根据专家名称设置对应的图标
+            let expertIcon = "fas fa-robot";
+            if (expertName === "粤剧专家") {
+              expertIcon = "fas fa-theater-masks";
+            } else if (expertName === "建筑专家") {
+              expertIcon = "fas fa-building";
+            } else if (expertName === "美食专家") {
+              expertIcon = "fas fa-utensils";
+            } else if (expertName === "节庆专家") {
+              expertIcon = "fas fa-calendar-alt";
+            } else if (expertName === "茶文化专家") {
+              expertIcon = "fas fa-leaf";
+            } else if (expertName === "手工艺专家") {
+              expertIcon = "fas fa-hammer";
+            } else if (expertName === "诗词文学专家") {
+              expertIcon = "fas fa-book";
+            } else if (expertName === "中医药专家") {
+              expertIcon = "fas fa-pills";
+            }
+            avatar.innerHTML = `<i class="${expertIcon}"></i>`;
+          }
+
+          const content = document.createElement("div");
+          content.className = "message-content";
+
+          const bubble = document.createElement("div");
+          bubble.className = "message-bubble";
+
+          const expertTag = document.createElement("div");
+          expertTag.className = "expert-name-tag";
+
+          // 为专家标签添加个性化样式类
+          if (expertName === "粤剧专家") {
+            expertTag.classList.add("opera-expert");
+          } else if (expertName === "建筑专家") {
+            expertTag.classList.add("architecture-expert");
+          } else if (expertName === "美食专家") {
+            expertTag.classList.add("culinary-expert");
+          } else if (expertName === "节庆专家") {
+            expertTag.classList.add("festival-expert");
+          }
+
+          expertTag.textContent = expertName;
+          if (isAmbassador) {
+            expertTag.classList.add("ambassador");
+          }
+          bubble.appendChild(expertTag);
+
+          // 添加加载动画
+          const loadingDiv = document.createElement("div");
+          loadingDiv.className = "loading-animation";
+          loadingDiv.innerHTML = `
+                     <div class="loading-dots">
+                         <span></span>
+                         <span></span>
+                         <span></span>
+                     </div>
+                     <span class="loading-text">正在思考中...</span>
+                 `;
+          bubble.appendChild(loadingDiv);
+
+          content.appendChild(bubble);
+          messageDiv.appendChild(avatar);
+          messageDiv.appendChild(content);
+
+          discussionArea.appendChild(messageDiv);
+          discussionArea.scrollTop = discussionArea.scrollHeight;
+
+          return messageId;
+        }
+
+        removeLoadingMessage(messageId) {
+          const loadingMessage = document.getElementById(messageId);
+          if (loadingMessage) {
+            loadingMessage.remove();
+          }
+        }
+
+        createStreamingMessage(expertName, isAmbassador) {
+          if (isAmbassador === undefined) isAmbassador = false;
+          const discussionArea = document.getElementById("discussion-area");
+
+          const messageDiv = document.createElement("div");
+          messageDiv.className = `message ai`;
+
+          // 为不同专家添加个性化CSS类
+          if (expertName === "粤剧专家") {
+            messageDiv.classList.add("opera-expert");
+          } else if (expertName === "建筑专家") {
+            messageDiv.classList.add("architecture-expert");
+          } else if (expertName === "美食专家") {
+            messageDiv.classList.add("culinary-expert");
+          } else if (expertName === "节庆专家") {
+            messageDiv.classList.add("festival-expert");
+          }
+
+          if (isAmbassador) {
+            messageDiv.classList.add("ambassador");
+          }
+
+          const avatar = document.createElement("div");
+          avatar.className = "message-avatar";
+
+          if (isAmbassador) {
+            avatar.innerHTML = '<i class="fas fa-crown"></i>';
+            avatar.style.background =
+              "linear-gradient(135deg, #d4af37, #c41e3a)";
+          } else {
+            // 根据专家名称设置对应的图标
+            let expertIcon = "fas fa-robot";
+            if (expertName === "粤剧专家") {
+              expertIcon = "fas fa-theater-masks";
+            } else if (expertName === "建筑专家") {
+              expertIcon = "fas fa-building";
+            } else if (expertName === "美食专家") {
+              expertIcon = "fas fa-utensils";
+            } else if (expertName === "节庆专家") {
+              expertIcon = "fas fa-calendar-alt";
+            } else if (expertName === "茶文化专家") {
+              expertIcon = "fas fa-leaf";
+            } else if (expertName === "手工艺专家") {
+              expertIcon = "fas fa-hammer";
+            } else if (expertName === "诗词文学专家") {
+              expertIcon = "fas fa-book";
+            } else if (expertName === "中医药专家") {
+              expertIcon = "fas fa-pills";
+            }
+            avatar.innerHTML = `<i class="${expertIcon}"></i>`;
+          }
+
+          const content = document.createElement("div");
+          content.className = "message-content";
+
+          const bubble = document.createElement("div");
+          bubble.className = "message-bubble";
+
+          const expertTag = document.createElement("div");
+          expertTag.className = "expert-name-tag";
+
+          // 为专家标签添加个性化样式类
+          if (expertName === "粤剧专家") {
+            expertTag.classList.add("opera-expert");
+          } else if (expertName === "建筑专家") {
+            expertTag.classList.add("architecture-expert");
+          } else if (expertName === "美食专家") {
+            expertTag.classList.add("culinary-expert");
+          } else if (expertName === "节庆专家") {
+            expertTag.classList.add("festival-expert");
+          }
+
+          expertTag.textContent = expertName;
+          if (isAmbassador) {
+            expertTag.classList.add("ambassador");
+          }
+          bubble.appendChild(expertTag);
+
+          const messageText = document.createElement("p");
+          messageText.className = "message-text streaming";
+          messageText.textContent = "";
+
+          const time = document.createElement("div");
+          time.className = "message-time";
+          time.textContent = new Date().toLocaleTimeString();
+
+          // 创建操作按钮容器
+          const actionsDiv = document.createElement("div");
+          actionsDiv.className = "message-actions";
+
+          // 创建复制按钮
+          const copyBtn = document.createElement("button");
+          copyBtn.className = "action-btn copy-btn";
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+          copyBtn.title = "复制内容";
+          copyBtn.onclick = () => this.copyMessage(messageText.textContent);
+
+          // 创建语音播放按钮
+          const voiceBtn = document.createElement("button");
+          voiceBtn.className = "action-btn voice-btn";
+          voiceBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+          voiceBtn.title = "语音播放";
+          voiceBtn.onclick = () => this.playMessage(messageText.textContent);
+
+          actionsDiv.appendChild(copyBtn);
+          actionsDiv.appendChild(voiceBtn);
+
+          bubble.appendChild(messageText);
+          bubble.appendChild(time);
+          bubble.appendChild(actionsDiv);
+          content.appendChild(bubble);
+
+          messageDiv.appendChild(avatar);
+          messageDiv.appendChild(content);
+
+          discussionArea.appendChild(messageDiv);
+          discussionArea.scrollTop = discussionArea.scrollHeight;
+
+          return messageDiv;
+        }
+
+        getExpertResponse(expert, userMessage) {
+          const responses = {
+            粤剧专家: [
+              `从粤剧艺术的角度来看，这个问题涉及到我们传统戏曲文化的精髓。粤剧作为广府文化的重要组成部分，承载着深厚的历史底蕴。`,
+              `粤剧表演艺术中蕴含着丰富的文化内涵，您提到的问题让我想到了粤剧中的经典唱段和表演技法。`,
+              `作为粤剧专家，我认为这个话题与我们的传统戏曲文化密切相关，值得深入探讨。`,
+            ],
+            建筑专家: [
+              `从岭南建筑的视角分析，这个问题代表了广府地区独特的建筑文化特色。传统的岭南建筑注重通风采光，代表了人与自然的和谐。`,
+              `岭南建筑艺术中的雕梁画栋、镬耳墙等元素，都承载着深沉的文化寓意，与您的问题有着密切的联系。`,
+              `作为建筑专家，我从空间布局和文化象征的角度来理解您的问题，这确实是一个很有意义的话题。`,
+            ],
+            美食专家: [
+              `从粤菜文化的角度来说，这个问题让我联想到广府饮食文化的博大精深。粤菜讲究"不时不食"，体现了对自然规律的尊重。`,
+              `广府美食文化中的茶楼文化、早茶习俗等，都与您提到的问题有着深层的文化关联。`,
+              `作为美食专家，我认为饮食文化是了解广府文化的重要窗口，您的问题很有探讨价值。`,
+            ],
+            节庆专家: [
+              `从传统节庆民俗的角度来看，这个问题涉及到广府地区丰富的节庆文化传统。像迎春花市、龙舟竞渡等都是我们的文化瑰宝。`,
+              `广府地区的节庆活动承载着深沉的文化内涵和民俗智慧，与您的问题形成了很好的呼应。`,
+              `作为节庆专家，我从民俗传统和文化传承的角度来理解您的问题，这确实值得我们深入思考。`,
+            ],
+          };
+
+          return (
+            responses[expert.name] || [
+              `作为${expert.name}，我认为这是一个很有价值的文化问题。`,
+            ]
+          );
+        }
+
+        addAmbassadorSummary(userMessage) {
+          // 生成智能总结
+          this.generateIntelligentSummary(userMessage);
+        }
+
+        // 生成智能总结
+        async generateIntelligentSummary(userMessage) {
+          try {
+            // 收集讨论内容
+            const discussionContent = this.collectDiscussionContent();
+
+            // 调用大模型API生成总结
+            const summary = await this.callAIForSummary(
+              userMessage,
+              discussionContent
+            );
+
+            // 显示总结
+            this.addMessage(summary, "ai", this.guangfuAmbassador.name, true);
+          } catch (error) {
+            console.error("生成智能总结失败:", error);
+            // 降级到传统总结
+            this.addFallbackSummary(userMessage);
+          }
+        }
+
+        // 收集讨论内容
+        collectDiscussionContent() {
+          const messages = [];
+          const messageElements = document.querySelectorAll(".message");
+
+          messageElements.forEach((element) => {
+            const expertName =
+              element.querySelector(".expert-label")?.textContent || "";
+            const messageText =
+              element.querySelector(".message-text")?.textContent || "";
+
+            if (
+              messageText &&
+              !messageText.includes("正在思考") &&
+              !messageText.includes("加载中")
+            ) {
+              messages.push({
+                expert: expertName,
+                content: messageText,
+              });
+            }
+          });
+
+          return messages;
+        }
+
+        // 调用AI生成总结
+        async callAIForSummary(userMessage, discussionContent) {
+          const prompt = this.buildSummaryPrompt(
+            userMessage,
+            discussionContent
+          );
+
+          const response = await fetch("/api/collaboration/summary", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              prompt: prompt,
+              user_message: userMessage,
+              discussion_content: discussionContent,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          return data.summary;
+        }
+
+        // 构建总结提示词
+        buildSummaryPrompt(userMessage, discussionContent) {
+          const expertResponses = discussionContent
+            .filter((msg) => msg.expert && msg.expert !== "用户")
+            .map((msg) => `${msg.expert}: ${msg.content}`)
+            .join("\n\n");
+
+          return `作为广府文化助手，请根据以下讨论内容生成一个智能总结：
+
+用户问题：${userMessage}
+
+专家回复：
+${expertResponses}
+
+请生成一个包含以下要素的总结：
+1. 对各专家观点的综合分析
+2. 突出广府文化的特色和价值
+3. 提供2-3个相关的延伸问题，引导用户继续探索
+4. 语言要生动有趣，体现广府文化的魅力
+
+总结格式要求：
+- 开头：综合分析各专家观点
+- 中间：深入阐述广府文化内涵
+- 结尾：提出引导性问题，激发用户兴趣
+
+请用温暖、专业且富有感染力的语调回复。`;
+        }
+
+        // 降级总结方案
+        addFallbackSummary(userMessage) {
+          const keywordAnalysis = this.analyzeUserQuestion(userMessage);
+          const summary = this.generateContextualSummary(keywordAnalysis);
+          this.addMessage(summary, "ai", this.guangfuAmbassador.name, true);
+        }
+
+        // 分析用户问题关键词
+        analyzeUserQuestion(userMessage) {
+          const keywords = {
+            food: [
+              "粤菜",
+              "茶点",
+              "早茶",
+              "煲汤",
+              "烧腊",
+              "点心",
+              "美食",
+              "菜系",
+            ],
+            opera: ["粤剧", "戏曲", "唱腔", "表演", "传统戏剧"],
+            architecture: [
+              "骑楼",
+              "建筑",
+              "园林",
+              "祠堂",
+              "古建筑",
+              "岭南建筑",
+            ],
+            festival: ["节庆", "传统节日", "民俗", "庆典", "习俗"],
+            language: ["粤语", "方言", "语言", "口音"],
+            art: ["艺术", "工艺", "手工艺", "传统技艺"],
+            history: ["历史", "文化", "传统", "起源", "发展"],
+          };
+
+          const detected = [];
+          for (const [category, words] of Object.entries(keywords)) {
+            if (words.some((word) => userMessage.includes(word))) {
+              detected.push(category);
+            }
+          }
+
+          return detected.length > 0 ? detected : ["general"];
+        }
+
+        // 生成上下文相关的总结
+        generateContextualSummary(categories) {
+          const summaryTemplates = {
+            food: {
+              content: `通过各位专家的深入分析，我们深刻感受到了广府饮食文化的博大精深。从精致的茶点到滋补的煲汤，从传统的烧腊到创新的粤菜，每一道菜品都承载着深厚的文化内涵和匠心精神。`,
+              questions: [
+                "您想了解哪道经典粤菜的制作工艺和文化故事？",
+                "对于广府茶文化的发展历程，您还有什么想深入探讨的？",
+                "您是否好奇广府饮食如何影响了海外华人社区的文化传承？",
+              ],
+            },
+            opera: {
+              content: `粤剧作为广府文化的瑰宝，各位专家的分析让我们看到了它独特的艺术魅力和深厚的文化底蕴。从唱腔的韵味到表演的精湛，粤剧不仅是艺术形式，更是文化传承的重要载体。`,
+              questions: [
+                "您想了解粤剧中哪个经典剧目的文化内涵？",
+                "对于粤剧在现代社会的传承与创新，您有什么看法？",
+                "您是否好奇粤剧与其他地方戏曲的异同之处？",
+              ],
+            },
+            architecture: {
+              content: `岭南建筑的独特魅力在各位专家的解读中得到了充分展现。从实用的骑楼到精美的园林，从庄严的祠堂到现代的创新，广府建筑文化体现了人与自然的和谐统一。`,
+              questions: [
+                "您想深入了解哪种岭南建筑的设计理念和文化寓意？",
+                "对于传统建筑在现代城市中的保护与利用，您有什么想法？",
+                "您是否好奇岭南建筑如何体现了广府人的生活智慧？",
+              ],
+            },
+            general: {
+              content: `综合各位专家的精彩分析，我们从多个维度领略了广府文化的独特魅力。这种文化的多元性和包容性，正是其能够传承至今并持续发展的重要原因。`,
+              questions: [
+                "您最感兴趣的广府文化领域是什么？我们可以深入探讨。",
+                "您想了解广府文化在当代社会中的传承与发展现状吗？",
+                "对于广府文化的国际传播，您有什么想了解的？",
+              ],
+            },
+          };
+
+          const category = categories[0] || "general";
+          const template =
+            summaryTemplates[category] || summaryTemplates.general;
+
+          const randomQuestions = this.shuffleArray([
+            ...template.questions,
+          ]).slice(0, 2);
+
+          return `${template.content}
+
+🤔 **继续探索**：
+${randomQuestions.map((q, i) => `${i + 1}. ${q}`).join("\n")}
+
+作为您的广府文化向导，我期待与您继续这场精彩的文化之旅！`;
+        }
+
+        // 数组随机排序
+        shuffleArray(array) {
+          const newArray = [...array];
+          for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+          }
+          return newArray;
+        }
+
+        updateTimer() {
+          setInterval(() => {
+            const elapsed = Math.floor((Date.now() - this.startTime) / 60000);
+            document.getElementById("discussion-time").textContent = elapsed;
+          }, 60000);
+        }
+
+        // 复制消息功能
+        copyMessage(messageElement) {
+          const text = messageElement.textContent || messageElement.innerText;
+
+          // 使用现代的 Clipboard API
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard
+              .writeText(text)
+              .then(() => {
+                this.showCopyFeedback(messageElement);
+              })
+              .catch((err) => {
+                console.error("复制失败:", err);
+                this.fallbackCopyTextToClipboard(text, messageElement);
+              });
+          } else {
+            // 降级方案
+            this.fallbackCopyTextToClipboard(text, messageElement);
+          }
+        }
+
+        // 降级复制方案
+        fallbackCopyTextToClipboard(text, messageElement) {
+          const textArea = document.createElement("textarea");
+          textArea.value = text;
+          textArea.style.top = "0";
+          textArea.style.left = "0";
+          textArea.style.position = "fixed";
+          textArea.style.opacity = "0";
+
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+
+          try {
+            const successful = document.execCommand("copy");
+            if (successful) {
+              this.showCopyFeedback(messageElement);
+            } else {
+              console.error("复制命令执行失败");
+            }
+          } catch (err) {
+            console.error("复制失败:", err);
+          }
+
+          document.body.removeChild(textArea);
+        }
+
+        // 显示复制反馈
+        showCopyFeedback(messageElement) {
+          const copyBtn =
+            messageElement.parentElement.querySelector(".copy-btn");
+          if (copyBtn) {
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+            copyBtn.classList.add("copied");
+
+            setTimeout(() => {
+              copyBtn.innerHTML = originalText;
+              copyBtn.classList.remove("copied");
+            }, 2000);
+          }
+        }
+
+        // 语音播放功能
+        playMessage(text, voiceBtn) {
+          // 检查浏览器是否支持语音合成
+          if (!("speechSynthesis" in window)) {
+            alert("您的浏览器不支持语音播放功能");
+            return;
+          }
+
+          // 如果正在播放，则停止
+          if (speechSynthesis.speaking) {
+            speechSynthesis.cancel();
+            this.resetVoiceButton(voiceBtn);
+            return;
+          }
+
+          // 创建语音合成实例
+          const utterance = new SpeechSynthesisUtterance(text);
+
+          // 设置语音参数
+          utterance.lang = "zh-CN"; // 中文
+          utterance.rate = 0.9; // 语速
+          utterance.pitch = 1; // 音调
+          utterance.volume = 0.8; // 音量
+
+          // 播放开始时的处理
+          utterance.onstart = () => {
+            voiceBtn.innerHTML = '<i class="fas fa-stop"></i> 停止';
+            voiceBtn.classList.add("playing");
+          };
+
+          // 播放结束时的处理
+          utterance.onend = () => {
+            this.resetVoiceButton(voiceBtn);
+          };
+
+          // 播放错误时的处理
+          utterance.onerror = (event) => {
+            console.error("语音播放错误:", event.error);
+            this.resetVoiceButton(voiceBtn);
+          };
+
+          // 开始播放
+          speechSynthesis.speak(utterance);
+        }
+
+        // 重置语音按钮状态
+        resetVoiceButton(voiceBtn) {
+          voiceBtn.innerHTML = '<i class="fas fa-volume-up"></i> 播放';
+          voiceBtn.classList.remove("playing");
+        }
+      }
+
+      // 初始化协作讨论
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("=== DOMContentLoaded 事件触发 ==="); // 调试日志
+        console.log("开始创建 CollaborationChat 实例"); // 调试日志
+        const chat = new CollaborationChat();
+        console.log("CollaborationChat 实例创建完成:", chat); // 调试日志
+      });
+    </script>
+  </body>
+</html>

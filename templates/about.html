@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>关于我们 - 广府非遗文化智能问答系统</title>
+    <link
+      href="/static/css/bootstrap-5.1.3.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/static/css/main.css" rel="stylesheet" />
+    <style>
+      /* 关于页面专用样式 - 使用main.css中的导航栏样式 */
+      body {
+        padding-top: 70px; /* 为固定导航栏留出空间 */
+      }
+
+      /* 英雄区域 - 使用广府文化渐变 */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 100%
+        );
+        color: white;
+        padding: 80px 0 80px; /* 减少顶部padding，因为body已经有padding-top */
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 25% 25%,
+            rgba(212, 175, 55, 0.2) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 75% 75%,
+            rgba(44, 85, 48, 0.2) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      .hero-cta {
+        background: var(--accent-color);
+        color: var(--bg-dark);
+        padding: 15px 30px;
+        border: none;
+        border-radius: var(--radius-lg);
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .hero-cta:hover {
+        background: #c4941f;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-xl);
+        color: var(--bg-dark);
+      }
+
+      .about-section {
+        padding: 80px 0;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #2c3e50;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .feature-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #f0f0f0;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-cultural);
+        border-color: var(--primary-color);
+      }
+
+      .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 100%
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2c3e50;
+      }
+
+      .feature-card p {
+        color: #6c757d;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .stats-section {
+        background: #f8f9fa;
+        padding: 80px 0;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        text-align: center;
+      }
+
+      .stat-item {
+        padding: 2rem;
+      }
+
+      .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 1.1rem;
+        color: #6c757d;
+        font-weight: 500;
+      }
+
+      .mission-section {
+        padding: 80px 0;
+        background: white;
+      }
+
+      .mission-content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .mission-text {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: #495057;
+        margin-bottom: 3rem;
+      }
+
+      .cta-section {
+        background: linear-gradient(
+          135deg,
+          var(--secondary-color) 0%,
+          var(--cultural-blue) 100%
+        );
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+      }
+
+      .cta-title {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .cta-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+      }
+
+      .btn-cta {
+        background: var(--accent-color);
+        color: var(--bg-dark);
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: var(--radius-lg);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-xl);
+        background: #c4941f;
+        color: var(--bg-dark);
+      }
+
+      /* 广府非遗文化介绍样式 */
+      .heritage-intro-section {
+        padding: 80px 0;
+        background: linear-gradient(
+          135deg,
+          var(--bg-tertiary) 0%,
+          rgba(255, 255, 255, 0.9) 100%
+        );
+      }
+
+      .heritage-intro-content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .intro-text p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+      }
+
+      /* 文化领域详细介绍样式 */
+      .cultural-details-section {
+        padding: 80px 0;
+        background: var(--bg-primary);
+      }
+
+      .cultural-detail-item {
+        margin-bottom: 60px;
+        padding: 40px;
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(196, 30, 58, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .cultural-detail-item:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(196, 30, 58, 0.2);
+      }
+
+      .detail-content {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .detail-content.reverse {
+        flex-direction: row-reverse;
+      }
+
+      .detail-text {
+        flex: 1;
+      }
+
+      .detail-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .detail-title i {
+        font-size: 1.3rem;
+        color: var(--accent-color);
+      }
+
+      .detail-description {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+      }
+
+      .detail-highlights {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .highlight-tag {
+        display: inline-block;
+        padding: 6px 12px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border-radius: var(--radius-sm);
+        box-shadow: 0 2px 4px rgba(196, 30, 58, 0.2);
+      }
+
+      .detail-visual {
+        flex-shrink: 0;
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .visual-icon {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+      }
+
+      .visual-icon i {
+        font-size: 2.5rem;
+        color: white;
+      }
+
+      .cultural-detail-item:hover .visual-icon {
+        transform: scale(1.1);
+        box-shadow: var(--shadow-lg);
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .hero-section {
+          padding: 80px 0 60px;
+        }
+
+        .about-section {
+          padding: 60px 0;
+        }
+
+        .heritage-intro-section,
+        .cultural-details-section {
+          padding: 60px 0;
+        }
+
+        .cultural-detail-item {
+          padding: 30px 20px;
+          margin-bottom: 40px;
+        }
+
+        .detail-content,
+        .detail-content.reverse {
+          flex-direction: column;
+          text-align: center;
+          gap: 30px;
+        }
+
+        .detail-title {
+          font-size: 1.3rem;
+          justify-content: center;
+        }
+
+        .detail-visual {
+          width: 100px;
+          height: 100px;
+          margin: 0 auto;
+        }
+
+        .visual-icon {
+          width: 80px;
+          height: 80px;
+        }
+
+        .visual-icon i {
+          font-size: 2rem;
+        }
+
+        .intro-text p {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 导航栏 -->
+    <nav class="modern-navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <i class="fas fa-dragon"></i>
+          <span>广府非遗</span>
+        </div>
+        <div class="nav-menu">
+          <a href="/" class="nav-link">首页</a>
+          <a href="/chat" class="nav-link">行家交流</a>
+          <a href="/collaboration" class="nav-link">协作讨论</a>
+          <button class="btn-modern" onclick="location.href='/features'">
+            功能中心
+          </button>
+          <a href="/about" class="nav-link active">关于</a>
+        </div>
+        <div class="nav-actions"></div>
+      </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">传承广府文化</h1>
+          <p class="hero-subtitle">
+            通过AI技术让千年广府非遗文化在数字时代焕发新生，为文化传承插上科技的翅膀
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 核心特色 -->
+    <section class="about-section">
+      <div class="container">
+        <h2 class="section-title">我们的特色</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-theater-masks"></i>
+            </div>
+            <h3>粤剧艺术</h3>
+            <p>
+              深入了解粤剧的历史渊源、表演技艺和文化内涵，感受南国戏曲的独特魅力
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <h3>传统建筑</h3>
+            <p>探索广府建筑的精湛工艺，从骑楼到祠堂，领略岭南建筑的独特风韵</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <h3>广府美食</h3>
+            <p>品味粤菜精髓，了解广府饮食文化的深厚底蕴和精湛烹饪技艺</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h3>节庆民俗</h3>
+            <p>体验丰富多彩的广府传统节庆，感受浓厚的民俗文化氛围</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 数据统计 -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number">1000+</span>
+            <span class="stat-label">文化知识点</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">4</span>
+            <span class="stat-label">专业领域</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">智能服务</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">AI</span>
+            <span class="stat-label">驱动技术</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使命愿景 -->
+    <section class="mission-section">
+      <div class="container">
+        <h2 class="section-title">我们的使命</h2>
+        <div class="mission-content">
+          <p class="mission-text">
+            我们致力于通过先进的人工智能技术，让广府非物质文化遗产在数字时代得到更好的保护、传承和发展。
+            通过智能问答系统，我们希望降低文化学习的门槛，让更多人能够便捷地接触和了解广府文化的深厚底蕴，
+            促进传统文化与现代科技的完美融合。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 广府非遗文化介绍 -->
+    <section class="heritage-intro-section">
+      <div class="container">
+        <h2 class="section-title">广府非遗文化概览</h2>
+        <div class="heritage-intro-content">
+          <div class="intro-text">
+            <p>
+              广府文化，又称广东文化，是中华文化的重要组成部分，有着两千多年的悠久历史。
+              作为岭南文化的核心，广府文化以其独特的地理环境和历史背景，形成了丰富多彩的非物质文化遗产。
+            </p>
+            <p>
+              从精彩绝伦的粤剧艺术到精湛的传统建筑工艺，从博大精深的粤菜文化到丰富多彩的节庆民俗，
+              广府非遗文化承载着深厚的历史底蕴和文化内涵，是中华民族文化宝库中的璀璨明珠。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 文化领域详细介绍 -->
+    <section class="cultural-details-section">
+      <div class="container">
+        <h2 class="section-title">文化领域深度解析</h2>
+
+        <!-- 粤剧文化 -->
+        <div class="cultural-detail-item">
+          <div class="detail-content">
+            <div class="detail-text">
+              <h3 class="detail-title">
+                <i class="fas fa-theater-masks"></i>
+                粤剧艺术 - 南国戏曲瑰宝
+              </h3>
+              <p class="detail-description">
+                粤剧被誉为"南国红豆"，是广东最具代表性的传统戏曲艺术。起源于明朝嘉靖年间，
+                融合了昆曲、弋阳腔、梆子等多种声腔艺术，形成了独特的表演风格。粤剧以其优美的唱腔、
+                精湛的表演技艺和丰富的剧目内容，成为联合国教科文组织认定的人类非物质文化遗产。
+              </p>
+              <div class="detail-highlights">
+                <span class="highlight-tag">UNESCO非遗</span>
+                <span class="highlight-tag">400年历史</span>
+                <span class="highlight-tag">南国红豆</span>
+              </div>
+            </div>
+            <div class="detail-visual">
+              <div class="visual-icon">
+                <i class="fas fa-theater-masks"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 传统建筑 -->
+        <div class="cultural-detail-item">
+          <div class="detail-content reverse">
+            <div class="detail-visual">
+              <div class="visual-icon">
+                <i class="fas fa-building"></i>
+              </div>
+            </div>
+            <div class="detail-text">
+              <h3 class="detail-title">
+                <i class="fas fa-building"></i>
+                传统建筑 - 岭南建筑精华
+              </h3>
+              <p class="detail-description">
+                广府传统建筑体现了岭南地区独特的建筑智慧，从古典的祠堂庙宇到实用的骑楼商铺，
+                从精美的园林设计到独特的镬耳屋，每一种建筑形式都承载着深厚的文化内涵。
+                这些建筑不仅适应了岭南湿热的气候特点，更体现了广府人民的审美情趣和生活智慧。
+              </p>
+              <div class="detail-highlights">
+                <span class="highlight-tag">岭南特色</span>
+                <span class="highlight-tag">气候适应</span>
+                <span class="highlight-tag">文化载体</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 广府美食 -->
+        <div class="cultural-detail-item">
+          <div class="detail-content">
+            <div class="detail-text">
+              <h3 class="detail-title">
+                <i class="fas fa-utensils"></i>
+                广府美食 - 粤菜文化精髓
+              </h3>
+              <p class="detail-description">
+                粤菜作为中国八大菜系之一，以其清淡鲜美、营养丰富而闻名于世。广府美食文化不仅包括
+                精湛的烹饪技艺，更蕴含着深厚的饮食哲学。从早茶文化到煲汤艺术，从海鲜烹饪到点心制作，
+                每一道菜品都体现了广府人对食材的尊重和对生活的热爱。
+              </p>
+              <div class="detail-highlights">
+                <span class="highlight-tag">八大菜系</span>
+                <span class="highlight-tag">早茶文化</span>
+                <span class="highlight-tag">食疗养生</span>
+              </div>
+            </div>
+            <div class="detail-visual">
+              <div class="visual-icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 节庆民俗 -->
+        <div class="cultural-detail-item">
+          <div class="detail-content reverse">
+            <div class="detail-visual">
+              <div class="visual-icon">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+            </div>
+            <div class="detail-text">
+              <h3 class="detail-title">
+                <i class="fas fa-calendar-alt"></i>
+                节庆民俗 - 传统文化载体
+              </h3>
+              <p class="detail-description">
+                广府地区的传统节庆民俗丰富多彩，从春节的花市迎春到中秋的赏月品饼，
+                从端午的龙舟竞渡到重阳的登高祈福，每一个节庆都承载着深厚的文化内涵和民族情感。
+                这些民俗活动不仅是文化传承的重要载体，更是增进社区凝聚力的重要纽带。
+              </p>
+              <div class="detail-highlights">
+                <span class="highlight-tag">花市文化</span>
+                <span class="highlight-tag">龙舟竞渡</span>
+                <span class="highlight-tag">社区凝聚</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    {#
+    <section class="cta-section">
+      <div class="cta-container">
+        <div class="cta-content">
+          <h2>开始您的文化探索之旅</h2>
+          <p>与AI专家对话，深入了解广府非遗文化的魅力</p>
+          <button class="btn-cta" onclick="location.href='/chat'">
+            <i class="fas fa-comments"></i>
+            开始对话
+          </button>
+        </div>
+        <div class="cta-visual">
+          <div class="floating-elements">
+            <div class="floating-icon" style="--delay: 0s">
+              <i class="fas fa-theater-masks"></i>
+            </div>
+            <div class="floating-icon" style="--delay: 1s">
+              <i class="fas fa-building"></i>
+            </div>
+            <div class="floating-icon" style="--delay: 2s">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <div class="floating-icon" style="--delay: 3s">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    #}
+
+    <!-- 现代化页脚 -->
+    <footer class="modern-footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="brand-logo">
+              <i class="fas fa-dragon"></i>
+              <span>广府非遗文化智能问答系统</span>
+            </div>
+            <p>传承文化，智慧问答</p>
+          </div>
+          <div class="footer-links">
+            <div class="link-group">
+              <h4>产品</h4>
+              <a href="/chat">行家交流</a>
+              <a href="/collaboration">协作讨论</a>
+            </div>
+            <div class="link-group">
+              <h4>文化</h4>
+              <a href="/agents#cantonese_opera_critic">粤剧文化</a>
+              <a href="/agents#architecture_expert">建筑艺术</a>
+              <a href="/agents#culinary_expert">美食文化</a>
+              <a href="/agents#festival_expert">节庆传统</a>
+            </div>
+            <div class="link-group">
+              <h4>支持</h4>
+              <a href="/about">关于我们</a>
+              <a href="#contact">联系我们</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2024 广府非遗文化智能问答系统. 保留所有权利.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/static/js/bootstrap-5.1.3.bundle.min.js"></script>
+  </body>
+</html>

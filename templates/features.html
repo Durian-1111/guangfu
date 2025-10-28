@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>功能中心 - 广府非遗文化平台</title>
+    <link
+      href="/static/css/bootstrap-5.1.3.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/static/css/main.css" rel="stylesheet" />
+    <style>
+      /* 功能中心页面专用样式 - 参考关于页面 */
+      body {
+        padding-top: 70px; /* 为固定导航栏留出空间 */
+      }
+
+      /* 英雄区域 - 使用广府文化渐变 */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 100%
+        );
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 25% 25%,
+            rgba(212, 175, 55, 0.2) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 75% 75%,
+            rgba(44, 85, 48, 0.2) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      .feature-section {
+        padding: 80px 0;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #2c3e50;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .feature-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #f0f0f0;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-cultural);
+        border-color: var(--primary-color);
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 100%
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2c3e50;
+      }
+
+      .feature-card p {
+        color: #6c757d;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      /* 详细内容区域 */
+      .content-section {
+        padding: 60px 0;
+        background: #f8f9fa;
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 16px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .content-card h2 {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card p {
+        color: #6c757d;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+      }
+
+      .highlight-box {
+        background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+        border-left: 4px solid var(--primary-color);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+      }
+
+      .demo-area {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 2rem 0;
+        text-align: center;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cta-button {
+        background: var(--primary-color);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .cta-button:hover {
+        background: #a0182b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2rem;
+        }
+        .section-title {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 导航栏 -->
+    <nav class="modern-navbar">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <i class="fas fa-dragon"></i>
+          <span>广府非遗</span>
+        </div>
+        <div class="nav-menu">
+          <a href="/" class="nav-link">首页</a>
+          <a href="/chat" class="nav-link">行家交流</a>
+          <a href="/collaboration" class="nav-link">协作讨论</a>
+          <button class="btn-modern active">
+            功能中心
+          </button>
+          <a href="/about" class="nav-link">关于</a>
+        </div>
+        <div class="nav-actions"></div>
+      </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">功能中心</h1>
+        <p class="hero-subtitle">
+          全方位探索广府非遗文化，体验智能化的文化学习平台
+        </p>
+      </div>
+    </section>
+
+    <!-- 功能卡片 -->
+    <section class="feature-section">
+      <div class="container">
+        <h2 class="section-title">核心功能</h2>
+        <div class="feature-grid">
+          <a href="#knowledge-graph" class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-project-diagram"></i>
+            </div>
+            <h3>文化知识图谱</h3>
+            <p>探索广府文化的传承脉络与知识关联，可视化文化节点之间的关系网络</p>
+          </a>
+
+          <a href="#learning-path" class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-route"></i>
+            </div>
+            <h3>学习路径推荐</h3>
+            <p>根据您的兴趣量身定制广府文化学习路径，从入门到精通</p>
+          </a>
+
+          <a href="#voice-chat" class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-microphone"></i>
+            </div>
+            <h3>语音交互</h3>
+            <p>使用语音与AI专家对话，支持普通话和粤语，更自然的交互体验</p>
+          </a>
+
+          <a href="#cultural-calendar" class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h3>文化日历</h3>
+            <p>了解广府传统节日和文化日期，掌握重要节庆的习俗与内涵</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 详细内容区域 -->
+    <section class="content-section">
+      <div class="container">
+        
+        <!-- 文化知识图谱 -->
+        <div id="knowledge-graph" class="content-card">
+          <h2>🏛️ 文化知识图谱</h2>
+          <p>
+            文化知识图谱以可视化的方式展现广府文化各个领域之间的内在联系与传承脉络。
+            通过图谱，您可以清晰地看到传统文化各节点之间的关系，理解文化传承的全貌。
+          </p>
+          <div class="highlight-box">
+            <h5><i class="fas fa-lightbulb"></i> 功能特色</h5>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li>可视化展现文化节点关联</li>
+              <li>探索传统文化的传承脉络</li>
+              <li>了解文化领域之间的关系</li>
+              <li>发现新的文化连接点</li>
+            </ul>
+          </div>
+          <div class="demo-area">
+            <div>
+              <i class="fas fa-project-diagram fa-4x text-muted mb-3"></i>
+              <p class="text-muted">知识图谱可视化区域</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 学习路径推荐 -->
+        <div id="learning-path" class="content-card">
+          <h2>🎓 学习路径推荐</h2>
+          <p>
+            根据您的兴趣和学习目标，系统为您推荐个性化的广府文化学习路径。
+            从入门到精通，循序渐进地掌握广府文化的精髓。
+          </p>
+          <div class="highlight-box">
+            <h5><i class="fas fa-lightbulb"></i> 学习阶段</h5>
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <div class="mb-2"><strong style="color: #c41e3a;">阶段一</strong></div>
+                  <p class="small mb-0">入门基础知识</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <div class="mb-2"><strong style="color: #10b981;">阶段二</strong></div>
+                  <p class="small mb-0">深入学习领域</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <div class="mb-2"><strong style="color: #f59e0b;">阶段三</strong></div>
+                  <p class="small mb-0">专家协同讨论</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded">
+                  <div class="mb-2"><strong style="color: #3b82f6;">阶段四</strong></div>
+                  <p class="small mb-0">实践与传承</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 语音交互 -->
+        <div id="voice-chat" class="content-card">
+          <h2>🎤 语音交互</h2>
+          <p>
+            通过语音与AI专家进行自然对话，支持普通话和粤语识别。
+            语音交互让文化学习更加便捷，您可以随时随地向专家提问。
+          </p>
+          <div class="highlight-box">
+            <h5><i class="fas fa-lightbulb"></i> 支持功能</h5>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li>实时语音识别</li>
+              <li>支持普通话和粤语</li>
+              <li>AI智能语音回复</li>
+              <li>多专家对话支持</li>
+            </ul>
+          </div>
+          <div class="demo-area">
+            <div>
+              <i class="fas fa-microphone fa-4x text-muted mb-3"></i>
+              <p class="text-muted">点击麦克风开始语音对话</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 文化日历 -->
+        <div id="cultural-calendar" class="content-card">
+          <h2>📅 文化日历</h2>
+          <p>
+            了解广府传统节日和文化日期，掌握重要节庆的历史背景、习俗与文化内涵。
+            让传统文化融入现代生活。
+          </p>
+          <div class="highlight-box">
+            <h5><i class="fas fa-lightbulb"></i> 主要节日</h5>
+            <div class="row mt-3">
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-fire text-danger"></i> <strong>春节</strong> - 正月初一
+              </div>
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-dragon text-warning"></i> <strong>端午节</strong> - 五月初五
+              </div>
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-moon text-success"></i> <strong>中秋节</strong> - 八月十五
+              </div>
+              <div class="col-md-6 mb-2">
+                <i class="fas fa-leaf text-info"></i> <strong>清明节</strong> - 四月初
+              </div>
+            </div>
+          </div>
+          <div class="demo-area">
+            <div>
+              <i class="fas fa-calendar-alt fa-4x text-muted mb-3"></i>
+              <p class="text-muted">查看广府传统节日日历</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <script src="/static/js/bootstrap-5.1.3.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+      // 平滑滚动到锚点
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
